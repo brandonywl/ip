@@ -1,4 +1,4 @@
-public class Tasks {
+public class TaskManager {
     private int taskLimit = 100;
     public String[] tasks = new String[taskLimit];
     public int numberOfTasks = 0;

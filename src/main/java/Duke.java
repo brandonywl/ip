@@ -12,7 +12,7 @@ public class Duke {
         printIntroduction(logo);
         Scanner sc = new Scanner(System.in);
         String currentUserInput = "";
-        Tasks taskManager = new Tasks();
+        TaskManager taskManager = new TaskManager();
 
         while (!currentUserInput.equalsIgnoreCase("bye")){
             currentUserInput = sc.nextLine();
@@ -54,7 +54,7 @@ public class Duke {
         printDivider();
     }
 
-    public static void printTasks(Tasks taskManager){
+    public static void printTasks(TaskManager taskManager){
         String[] tasks = taskManager.getTasks();
         int numOfTasks = taskManager.getNumberOfTasks();
 
