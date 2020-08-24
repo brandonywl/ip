@@ -9,15 +9,18 @@ public class Duke {
                 + "|____/ \\__,_|_|\\_\\___|\n";
 
         printIntroduction(logo);
-/*        Scanner sc = new Scanner(System.In);
+        Scanner sc = new Scanner(System.in);
         String currentUserInput = "";
 
         while (!currentUserInput.equalsIgnoreCase("bye")){
             currentUserInput = sc.nextLine();
-            switch (currentUserInput){
-
+            switch (currentUserInput.toUpperCase()){
+                case "BYE":
+                    break;
+                default:
+                    printMessage(currentUserInput);
             }
-        }*/
+        }
 
         printExitMessage();
 
