@@ -1,5 +1,6 @@
 import java.util.Scanner;
 
+
 public class Duke {
     public static void main(String[] args) {
         String logo = " ____        _        \n"
@@ -11,14 +12,19 @@ public class Duke {
         printIntroduction(logo);
         Scanner sc = new Scanner(System.in);
         String currentUserInput = "";
+        Tasks taskManager = new Tasks();
 
         while (!currentUserInput.equalsIgnoreCase("bye")){
             currentUserInput = sc.nextLine();
-            switch (currentUserInput.toUpperCase()){
+            switch (currentUserInput.toUpperCase().split(" ")[0]){
                 case "BYE":
                     break;
+                case "LIST":
+                    printTasks(taskManager);
+                    break;
                 default:
-                    printMessage(currentUserInput);
+                    taskManager.addTask(currentUserInput);
+                    printMessage("added: " + currentUserInput);
             }
         }
 
@@ -45,6 +51,21 @@ public class Duke {
     public static void printMessage(String s){
         printDivider();
         System.out.println(s);
+        printDivider();
+    }
+
+    public static void printTasks(Tasks taskManager){
+        String[] tasks = taskManager.getTasks();
+        int numOfTasks = taskManager.getNumberOfTasks();
+
+        printDivider();
+        if (numOfTasks == 0){
+            System.out.println();
+        }
+        for (int i = 0; i < numOfTasks; i++){
+            String outputMessage = String.format("%d. %s", i+1, tasks[i]);
+            System.out.println(outputMessage);
+        }
         printDivider();
     }
 }
