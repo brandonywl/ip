@@ -4,8 +4,12 @@ public class Task {
 
     public Task(String job, boolean status) {
         this.job = job;
-        if (status) complete();
-        else incomplete();
+        if (status){
+            complete();
+        }
+        else{
+            incomplete();
+        }
     }
 
     public Task(String job) {
