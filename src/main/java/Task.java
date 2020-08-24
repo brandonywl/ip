@@ -2,10 +2,15 @@ public class Task {
     String job;
     String status;
 
-    public Task(String job, boolean status) {
+    public Task(String job, boolean isComplete) {
         this.job = job;
-        if (status) complete();
-        else incomplete();
+        if (isComplete){
+            complete();
+        }
+        else{
+            incomplete();
+        }
+
     }
 
     public Task(String job) {
