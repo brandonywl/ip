@@ -55,7 +55,7 @@ public class Duke {
     }
 
     public static void printTasks(TaskManager taskManager){
-        String[] tasks = taskManager.getTasks();
+        Task[] tasks = taskManager.getTasks();
         int numOfTasks = taskManager.getNumberOfTasks();
 
         printDivider();
@@ -63,7 +63,7 @@ public class Duke {
             System.out.println();
         }
         for (int i = 0; i < numOfTasks; i++){
-            String outputMessage = String.format("%d. %s", i+1, tasks[i]);
+            String outputMessage = String.format("%d. %s", i+1, tasks[i].job);
             System.out.println(outputMessage);
         }
         printDivider();
