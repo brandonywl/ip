@@ -27,12 +27,8 @@ public class TaskManager {
         }
     }
 
-/*    public void printTasks(){
-        if (getNumberOfTasks() > 0){
-
-        }
-        else{
-            System.out.println("");
-        }
-    }*/
+    public void completeTask(int userStipulatedIndex){
+        int index = userStipulatedIndex - 1;
+        tasks[index].complete();
+    }
 }

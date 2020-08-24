@@ -22,6 +22,13 @@ public class Duke {
                 case "LIST":
                     printTasks(taskManager);
                     break;
+                case "DONE":
+                    int index = Integer.parseInt(currentUserInput.split(" ")[1]);
+                    taskManager.completeTask(index);
+                    Task temp = taskManager.tasks[index - 1];
+                    printMessage(String.format("Nice! I've marked this task as done:\n\t[%s] %s%n", temp.status, temp.job));
+                    break;
+
                 default:
                     taskManager.addTask(currentUserInput);
                     printMessage("added: " + currentUserInput);
@@ -54,18 +61,26 @@ public class Duke {
         printDivider();
     }
 
+    public static void printMessage(String[] s){
+        printDivider();
+        for (String message : s) {
+            System.out.println(message);
+        }
+        printDivider();
+    }
+
     public static void printTasks(TaskManager taskManager){
         Task[] tasks = taskManager.getTasks();
         int numOfTasks = taskManager.getNumberOfTasks();
+        String[] messages = new String[numOfTasks];
 
-        printDivider();
         if (numOfTasks == 0){
             System.out.println();
         }
         for (int i = 0; i < numOfTasks; i++){
-            String outputMessage = String.format("%d. %s", i+1, tasks[i].job);
-            System.out.println(outputMessage);
+            String outputMessage = String.format("%d.\t[%s] %s", i+1, tasks[i].status, tasks[i].job);
+            messages[i] = outputMessage;
         }
-        printDivider();
+        printMessage(messages);
     }
 }
