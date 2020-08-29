@@ -14,15 +14,17 @@ public class Duke {
     public static final String TODO_COMMAND = "TODO";
     public static final String DEADLINE_COMMAND = "DEADLINE";
     public static final String EVENT_COMMAND = "EVENT";
+    public static final String LOGO = " ____        _        \n"
+            + "|  _ \\ _   _| | _____ \n"
+            + "| | | | | | | |/ / _ \\\n"
+            + "| |_| | |_| |   <  __/\n"
+            + "|____/ \\__,_|_|\\_\\___|\n";
+    public static final String DEADLINE_PREFIX = "/by";
+    public static final String EVENT_PREFIX = "/at";
 
     public static void main(String[] args) {
-        String logo = " ____        _        \n"
-                + "|  _ \\ _   _| | _____ \n"
-                + "| | | | | | | |/ / _ \\\n"
-                + "| |_| | |_| |   <  __/\n"
-                + "|____/ \\__,_|_|\\_\\___|\n";
 
-        printIntroduction(logo);
+        // Startup and Initializations
         Scanner sc = new Scanner(System.in);
         String currentUserInput = "";
         TaskManager taskManager = new TaskManager();
@@ -32,9 +34,11 @@ public class Duke {
         int timingIndex;
         int descriptionIndex;
 
-
-        while (!currentUserInput.equalsIgnoreCase("bye")) {
+        // Introduce the bot after startup
+        printIntroduction(LOGO);
+            while (!currentUserInput.equalsIgnoreCase(EXIT_COMMAND)) {
             currentUserInput = sc.nextLine();
+            // actionWord will always be the first word in the sentence
             actionWord = currentUserInput.toUpperCase().split(" ")[0];
             // Find the first " ". If it does not exist, the command would not use the index anyway. If it does
             // + 1 to remove the space and get the first index of the description.
@@ -50,6 +54,7 @@ public class Duke {
                 break;
 
             case COMPLETE_COMMAND:
+                // Number of task will be after done. Hence index is 1.
                 int index = Integer.parseInt(currentUserInput.split(" ")[1]);
                 taskManager.completeTask(index);
                 Task tempTask = taskManager.tasks[index - 1];
@@ -68,11 +73,11 @@ public class Duke {
                 break;
 
             case DEADLINE_COMMAND:
-                timingIndex = currentUserInput.lastIndexOf("/by");
+                timingIndex = currentUserInput.lastIndexOf(DEADLINE_PREFIX);
 
                 description = currentUserInput.substring(descriptionIndex, timingIndex);
-                // Remove /by by adding 3 to the starting index
-                timing = currentUserInput.substring(timingIndex + 3);
+                // Remove "/by " by adding 4 to the starting index
+                timing = currentUserInput.substring(timingIndex + 4);
                 taskManager.addDeadline(description, timing);
 
                 outputMessages = generateAddTaskMessages(taskManager);
@@ -80,11 +85,11 @@ public class Duke {
                 break;
 
             case EVENT_COMMAND:
-                timingIndex = currentUserInput.lastIndexOf(("/at"));
+                timingIndex = currentUserInput.lastIndexOf(EVENT_PREFIX);
 
                 description = currentUserInput.substring(descriptionIndex, timingIndex);
-                // Remove /at by adding 3 to the starting index
-                timing = currentUserInput.substring(timingIndex + 3);
+                // Remove "/at " by adding 3 to the starting index
+                timing = currentUserInput.substring(timingIndex + 4);
                 taskManager.addEvent(description, timing);
 
                 outputMessages = generateAddTaskMessages(taskManager);
