@@ -1,23 +1,26 @@
 public class TaskManager {
     private int taskLimit = 100;
-//    public String[] tasks = new String[taskLimit];
     public Task[] tasks = new Task[taskLimit];
     public int numberOfTasks = 0;
 
     public Task[] getTasks(){
-        return this.tasks;
+        return tasks;
+    }
+
+    public Task getLatestTask(){
+        return tasks[getNumberOfTasks() - 1];
     }
 
     public int getNumberOfTasks(){
-        return this.numberOfTasks;
+        return numberOfTasks;
     }
 
     public void addNumberOfTask(){
-        this.numberOfTasks += 1;
+        numberOfTasks += 1;
     }
 
     public void addTask(String task) {
-        if (getNumberOfTasks() < taskLimit) {
+        if (isUnderLimit()) {
             Task newTask = new Task(task);
             tasks[getNumberOfTasks()] = newTask;
             addNumberOfTask();
@@ -25,6 +28,31 @@ public class TaskManager {
         } else {
             System.out.println("Error. Maximum number of tasks hit!");
         }
+    }
+
+    public void addDeadline(String task, String deadline) {
+        if (isUnderLimit()){
+            Deadline newDeadline = new Deadline(task, deadline);
+            tasks[getNumberOfTasks()] = newDeadline;
+            addNumberOfTask();
+        } else {
+            System.out.println("Error. Maximum number of tasks hit!");
+        }
+
+    }
+
+    public void addEvent(String task, String startTime) {
+        if (isUnderLimit()){
+            Event newEvent = new Event(task, startTime);
+            tasks[getNumberOfTasks()] = newEvent;
+            addNumberOfTask();
+        } else {
+            System.out.println("Error. Maximum number of tasks hit!");
+        }
+    }
+
+    public boolean isUnderLimit() {
+        return getNumberOfTasks() < taskLimit;
     }
 
     public void completeTask(int userStipulatedIndex){
