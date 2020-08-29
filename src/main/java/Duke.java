@@ -36,7 +36,7 @@ public class Duke {
 
         // Introduce the bot after startup
         printIntroduction(LOGO);
-            while (!currentUserInput.equalsIgnoreCase(EXIT_COMMAND)) {
+        while (!currentUserInput.equalsIgnoreCase(EXIT_COMMAND)) {
             currentUserInput = sc.nextLine();
             // actionWord will always be the first word in the sentence
             actionWord = currentUserInput.toUpperCase().split(" ")[0];
@@ -108,6 +108,7 @@ public class Duke {
     /**
      * Generates a standard message to print when a new task is added. Retrieves the last task and prints it's
      * information.
+     *
      * @param taskManager TaskManager Object.
      * @return Returns a standard String Array to be printed.
      */
@@ -130,6 +131,7 @@ public class Duke {
 
     /**
      * Prints the introduction given a text-based logo.
+     *
      * @param logo String that represents the logo of the chat-bot.
      */
     public static void printIntroduction(String logo) {
@@ -148,6 +150,7 @@ public class Duke {
 
     /**
      * General purpose method to print a string between two dividers.
+     *
      * @param message Message to be printed.
      */
     public static void printMessage(String message) {
@@ -158,6 +161,7 @@ public class Duke {
 
     /**
      * General purpose method to print multiple strings between two dividers.
+     *
      * @param messages An array of messages to be printed
      */
     public static void printMessage(String[] messages) {
@@ -170,6 +174,7 @@ public class Duke {
 
     /**
      * Method to print all tasks stored inside the Task Manager
+     *
      * @param taskManager TaskManager Object used to retrieve a list of all tasks as well as number of tasks.
      */
     public static void printTasks(TaskManager taskManager) {
