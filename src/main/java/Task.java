@@ -1,3 +1,6 @@
+/**
+ * Task Class used to hold the job description as well as the status of the job.
+ */
 public class Task {
     String job;
     String status;
@@ -7,10 +10,11 @@ public class Task {
         incomplete();
     }
 
+    // Unicode representation of a tick
     public void complete() {
         this.status = "\u2713";
     }
-
+    // Unicode representation of a cross
     public void incomplete() {
         this.status = "\u2717";
     }

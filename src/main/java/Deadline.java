@@ -1,3 +1,7 @@
+/**
+ * Deadline task which inherits from Task.
+ * Adds the ability to have a deadline (by).
+ */
 public class Deadline extends Task {
     protected String deadline;
 

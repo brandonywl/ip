@@ -3,19 +3,19 @@ public class TaskManager {
     public Task[] tasks = new Task[taskLimit];
     public int numberOfTasks = 0;
 
-    public Task[] getTasks(){
+    public Task[] getTasks() {
         return tasks;
     }
 
-    public Task getLatestTask(){
+    public Task getLatestTask() {
         return tasks[getNumberOfTasks() - 1];
     }
 
-    public int getNumberOfTasks(){
+    public int getNumberOfTasks() {
         return numberOfTasks;
     }
 
-    public void addNumberOfTask(){
+    public void addNumberOfTask() {
         numberOfTasks += 1;
     }
 
@@ -31,7 +31,7 @@ public class TaskManager {
     }
 
     public void addDeadline(String task, String deadline) {
-        if (isUnderLimit()){
+        if (isUnderLimit()) {
             Deadline newDeadline = new Deadline(task, deadline);
             tasks[getNumberOfTasks()] = newDeadline;
             addNumberOfTask();
@@ -42,7 +42,7 @@ public class TaskManager {
     }
 
     public void addEvent(String task, String startTime) {
-        if (isUnderLimit()){
+        if (isUnderLimit()) {
             Event newEvent = new Event(task, startTime);
             tasks[getNumberOfTasks()] = newEvent;
             addNumberOfTask();
@@ -55,7 +55,7 @@ public class TaskManager {
         return getNumberOfTasks() < taskLimit;
     }
 
-    public void completeTask(int userStipulatedIndex){
+    public void completeTask(int userStipulatedIndex) {
         int index = userStipulatedIndex - 1;
         tasks[index].complete();
     }

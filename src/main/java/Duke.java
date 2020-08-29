@@ -1,6 +1,11 @@
 import java.util.Scanner;
 
 
+/**
+ * Main class that runs the chat bot. Tasks are managed by the TaskManager
+ * Duke provides the extraction of action words, descriptions and due dates
+ * Duke also provides methods to print useful messages
+ */
 public class Duke {
 
     public static final String EXIT_COMMAND = "BYE";
@@ -48,43 +53,43 @@ public class Duke {
                 int index = Integer.parseInt(currentUserInput.split(" ")[1]);
                 taskManager.completeTask(index);
                 Task tempTask = taskManager.tasks[index - 1];
-                outputMessages = new String[] {
+                outputMessages = new String[]{
                         "Nice! I've marked this task as done:",
                         "\t" + tempTask.toString()};
                 printMessage(outputMessages);
                 break;
 
-                case TODO_COMMAND:
-                    description = currentUserInput.substring(descriptionIndex);
-                    taskManager.addTask(description);
+            case TODO_COMMAND:
+                description = currentUserInput.substring(descriptionIndex);
+                taskManager.addTask(description);
 
-                    outputMessages = generateAddTaskMessages(taskManager);
-                    printMessage(outputMessages);
-                    break;
+                outputMessages = generateAddTaskMessages(taskManager);
+                printMessage(outputMessages);
+                break;
 
-                case DEADLINE_COMMAND:
-                    timingIndex = currentUserInput.lastIndexOf("/by");
+            case DEADLINE_COMMAND:
+                timingIndex = currentUserInput.lastIndexOf("/by");
 
-                    description = currentUserInput.substring(descriptionIndex, timingIndex);
-                    // Remove /by by adding 3 to the starting index
-                    timing = currentUserInput.substring(timingIndex + 3);
-                    taskManager.addDeadline(description, timing);
+                description = currentUserInput.substring(descriptionIndex, timingIndex);
+                // Remove /by by adding 3 to the starting index
+                timing = currentUserInput.substring(timingIndex + 3);
+                taskManager.addDeadline(description, timing);
 
-                    outputMessages = generateAddTaskMessages(taskManager);
-                    printMessage(outputMessages);
-                    break;
+                outputMessages = generateAddTaskMessages(taskManager);
+                printMessage(outputMessages);
+                break;
 
-                case EVENT_COMMAND:
-                    timingIndex = currentUserInput.lastIndexOf(("/at"));
+            case EVENT_COMMAND:
+                timingIndex = currentUserInput.lastIndexOf(("/at"));
 
-                    description = currentUserInput.substring(descriptionIndex, timingIndex);
-                    // Remove /at by adding 3 to the starting index
-                    timing = currentUserInput.substring(timingIndex + 3);
-                    taskManager.addEvent(description, timing);
+                description = currentUserInput.substring(descriptionIndex, timingIndex);
+                // Remove /at by adding 3 to the starting index
+                timing = currentUserInput.substring(timingIndex + 3);
+                taskManager.addEvent(description, timing);
 
-                    outputMessages = generateAddTaskMessages(taskManager);
-                    printMessage(outputMessages);
-                    break;
+                outputMessages = generateAddTaskMessages(taskManager);
+                printMessage(outputMessages);
+                break;
 
             default:
                 printMessage("Unknown Command! Try again!");
@@ -95,20 +100,33 @@ public class Duke {
 
     }
 
+    /**
+     * Generates a standard message to print when a new task is added. Retrieves the last task and prints it's
+     * information.
+     * @param taskManager TaskManager Object.
+     * @return Returns a standard String Array to be printed.
+     */
     public static String[] generateAddTaskMessages(TaskManager taskManager) {
         Task latestTask = taskManager.getLatestTask();
-        return new String[] {
+        return new String[]{
                 "Got it. I've added this task:",
                 "\t" + latestTask.toString(),
                 String.format("Now you have %d tasks in the list.", taskManager.getNumberOfTasks())
         };
     }
 
+    /**
+     * Prints a line to isolate Duke's replies.
+     */
     public static void printDivider() {
         String s = "------------------------------------------------";
         System.out.println(s);
     }
 
+    /**
+     * Prints the introduction given a text-based logo.
+     * @param logo String that represents the logo of the chat-bot.
+     */
     public static void printIntroduction(String logo) {
         printDivider();
         System.out.println("Hello I'm \n" + logo);
@@ -116,24 +134,39 @@ public class Duke {
         printDivider();
     }
 
+    /**
+     * Prints an exit message.
+     */
     public static void printExitMessage() {
         printMessage("Bye. Hope to see you again soon!");
     }
 
-    public static void printMessage(String s) {
+    /**
+     * General purpose method to print a string between two dividers.
+     * @param message Message to be printed.
+     */
+    public static void printMessage(String message) {
         printDivider();
-        System.out.println(s);
+        System.out.println(message);
         printDivider();
     }
 
-    public static void printMessage(String[] s) {
+    /**
+     * General purpose method to print multiple strings between two dividers.
+     * @param messages An array of messages to be printed
+     */
+    public static void printMessage(String[] messages) {
         printDivider();
-        for (String message : s) {
+        for (String message : messages) {
             System.out.println(message);
         }
         printDivider();
     }
 
+    /**
+     * Method to print all tasks stored inside the Task Manager
+     * @param taskManager TaskManager Object used to retrieve a list of all tasks as well as number of tasks.
+     */
     public static void printTasks(TaskManager taskManager) {
         Task[] tasks = taskManager.getTasks();
         int numOfTasks = taskManager.getNumberOfTasks();
