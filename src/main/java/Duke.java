@@ -56,19 +56,13 @@ public class Duke {
             case COMPLETE_COMMAND:
                 // Number of task will be after done. Hence index is 1.
                 int index = Integer.parseInt(currentUserInput.split(" ")[1]);
-                taskManager.completeTask(index);
-                Task tempTask = taskManager.tasks[index - 1];
-                outputMessages = new String[]{
-                        "Nice! I've marked this task as done:",
-                        "\t" + tempTask.toString()};
+                outputMessages = taskManager.completeTask(index);
                 printMessage(outputMessages);
                 break;
 
             case TODO_COMMAND:
                 description = currentUserInput.substring(descriptionIndex);
-                taskManager.addTask(description);
-
-                outputMessages = generateAddTaskMessages(taskManager);
+                outputMessages = taskManager.addTodo(description);
                 printMessage(outputMessages);
                 break;
 
@@ -78,9 +72,7 @@ public class Duke {
                 description = currentUserInput.substring(descriptionIndex, timingIndex);
                 // Remove "/by " by adding 4 to the starting index
                 timing = currentUserInput.substring(timingIndex + 4);
-                taskManager.addDeadline(description, timing);
-
-                outputMessages = generateAddTaskMessages(taskManager);
+                outputMessages = taskManager.addDeadline(description, timing);
                 printMessage(outputMessages);
                 break;
 
@@ -90,9 +82,7 @@ public class Duke {
                 description = currentUserInput.substring(descriptionIndex, timingIndex);
                 // Remove "/at " by adding 3 to the starting index
                 timing = currentUserInput.substring(timingIndex + 4);
-                taskManager.addEvent(description, timing);
-
-                outputMessages = generateAddTaskMessages(taskManager);
+                outputMessages = taskManager.addEvent(description, timing);
                 printMessage(outputMessages);
                 break;
 
@@ -103,22 +93,6 @@ public class Duke {
 
         printExitMessage();
 
-    }
-
-    /**
-     * Generates a standard message to print when a new task is added. Retrieves the last task and prints it's
-     * information.
-     *
-     * @param taskManager TaskManager Object.
-     * @return Returns a standard String Array to be printed.
-     */
-    public static String[] generateAddTaskMessages(TaskManager taskManager) {
-        Task latestTask = taskManager.getLatestTask();
-        return new String[]{
-                "Got it. I've added this task:",
-                "\t" + latestTask.toString(),
-                String.format("Now you have %d tasks in the list.", taskManager.getNumberOfTasks())
-        };
     }
 
     /**
@@ -157,6 +131,17 @@ public class Duke {
         printDivider();
         System.out.println(message);
         printDivider();
+    }
+
+    /**
+     * Specialized printMessage function to throw an error message
+     */
+    public static void printError() {
+        printMessage(new String[] {"Error!","","Unknown Command! Try again!"});
+    }
+
+    public static void printError(String message) {
+        printMessage(new String[] {"Error!", "", message});
     }
 
     /**
