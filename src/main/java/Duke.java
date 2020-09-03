@@ -37,11 +37,12 @@ public class Duke {
         // Introduce the bot after startup
         printIntroduction(LOGO);
         while (!currentUserInput.equalsIgnoreCase(EXIT_COMMAND)) {
-            currentUserInput = sc.nextLine();
+            currentUserInput = sc.nextLine().strip();
             // actionWord will always be the first word in the sentence
             actionWord = currentUserInput.toUpperCase().split(" ")[0];
             // Find the first " ". If it does not exist, the command would not use the index anyway. If it does
             // + 1 to remove the space and get the first index of the description.
+
             descriptionIndex = currentUserInput.indexOf(" ") + 1;
 
             String[] outputMessages;
@@ -55,12 +56,17 @@ public class Duke {
 
             case COMPLETE_COMMAND:
                 // Number of task will be after done. Hence index is 1.
+                // TODO: Error catch for no index of number
                 int index = Integer.parseInt(currentUserInput.split(" ")[1]);
                 outputMessages = taskManager.completeTask(index);
                 printMessage(outputMessages);
                 break;
 
             case TODO_COMMAND:
+                if (descriptionIndex == 0) {
+                    printError("There can't be no description!");
+                    break;
+                }
                 description = currentUserInput.substring(descriptionIndex);
                 outputMessages = taskManager.addTodo(description);
                 printMessage(outputMessages);
@@ -68,7 +74,12 @@ public class Duke {
 
             case DEADLINE_COMMAND:
                 timingIndex = currentUserInput.lastIndexOf(DEADLINE_PREFIX);
-
+                if (timingIndex == 0){
+                    printError("Please put a deadline!");
+                }
+                if (timingIndex == descriptionIndex || descriptionIndex == 0){
+                    printError("There can't be no description!");
+                }
                 description = currentUserInput.substring(descriptionIndex, timingIndex);
                 // Remove "/by " by adding 4 to the starting index
                 timing = currentUserInput.substring(timingIndex + 4);
@@ -78,7 +89,12 @@ public class Duke {
 
             case EVENT_COMMAND:
                 timingIndex = currentUserInput.lastIndexOf(EVENT_PREFIX);
-
+                if (timingIndex == 0){
+                    printError("Please put a deadline!");
+                }
+                if (timingIndex == descriptionIndex || descriptionIndex == 0){
+                    printError("There can't be no description!");
+                }
                 description = currentUserInput.substring(descriptionIndex, timingIndex);
                 // Remove "/at " by adding 3 to the starting index
                 timing = currentUserInput.substring(timingIndex + 4);
@@ -87,7 +103,7 @@ public class Duke {
                 break;
 
             default:
-                printMessage("Unknown Command! Try again!");
+                printError();
             }
         }
 

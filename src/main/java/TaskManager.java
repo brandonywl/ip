@@ -1,12 +1,16 @@
 public class TaskManager {
-    private int taskLimit;
+    private final int taskLimit;
     private int numberOfTasks;
     protected Task[] tasks;
 
-    TaskManager(){
-        taskLimit = 100;
+    TaskManager(int taskLimit){
+        this.taskLimit = taskLimit;
         tasks = new Task[taskLimit];
         numberOfTasks = 0;
+    }
+
+    TaskManager(){
+        this(100);
     }
 
     public Task[] getTasks() {
