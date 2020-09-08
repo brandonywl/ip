@@ -12,7 +12,7 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        return String.format("[D][%s] %s (by: %s)", status, job, deadline);
+        return "[D]" + super.toString() + String.format(" (by: %s)", deadline);
     }
 
 

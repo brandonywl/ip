@@ -12,6 +12,6 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        return String.format("[E][%s] %s (at: %s)", status, job, at);
+        return "[E]" + super.toString() + String.format(" (at: %s)", at);
     }
 }

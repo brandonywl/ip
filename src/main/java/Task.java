@@ -21,6 +21,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return String.format("[T][%s] %s", status, job);
+        return String.format("[%s] %s", status, job);
     }
 }
