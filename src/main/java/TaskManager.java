@@ -36,7 +36,7 @@ public class TaskManager {
 
     public String[] addTodo(String task) {
         if (isUnderLimit()) {
-            Task newTask = new Task(task);
+            Todo newTask = new Todo(task);
             addTask(newTask);
             return generateAddTaskMessages();
 
