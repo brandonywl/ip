@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -212,7 +213,7 @@ public class Duke {
      * @param taskManager TaskManager Object used to retrieve a list of all tasks as well as number of tasks.
      */
     public static void printTasks(TaskManager taskManager) {
-        Task[] tasks = taskManager.getTasks();
+        ArrayList<Task> tasks = taskManager.getTasks();
         int numOfTasks = taskManager.getNumberOfTasks();
         String[] messages = new String[numOfTasks];
 
@@ -220,7 +221,7 @@ public class Duke {
             messages = new String[] {EMPTY_TASK_LIST_MESSAGE};
         }
         for (int i = 0; i < numOfTasks; i++) {
-            String outputMessage = String.format("%d.\t%s", i + 1, tasks[i].toString());
+            String outputMessage = String.format("%d.\t%s", i + 1, tasks.get(i).toString());
             messages[i] = outputMessage;
         }
         printMessage(messages);
