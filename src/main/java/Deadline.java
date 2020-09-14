@@ -3,7 +3,7 @@
  * Adds the ability to have a deadline (by).
  */
 public class Deadline extends Task {
-    protected String deadline;
+    private String deadline;
 
     public Deadline(String job, String deadline) {
         super(job);
@@ -12,7 +12,7 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        return String.format("[D][%s] %s (by: %s)", status, job, deadline);
+        return "[D]" + super.toString() + String.format("(by: %s)", deadline);
     }
 
 

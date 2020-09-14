@@ -20,6 +20,7 @@ public class Duke {
     // Command list
     public static final String EXIT_COMMAND = "BYE";
     public static final String LIST_COMMAND = "LIST";
+    public static final String SAVE_COMMAND = "SAVE";
     public static final String COMPLETE_COMMAND = "DONE";
     public static final String TODO_COMMAND = "TODO";
     public static final String DELETE_COMMAND = "DELETE";
@@ -29,7 +30,7 @@ public class Duke {
     public static final String EVENT_PREFIX = "/at";
 
     // Consolidated Command List by Type
-    public static final String[] SINGLE_WORD_COMMANDS = new String[]{EXIT_COMMAND, LIST_COMMAND};
+    public static final String[] SINGLE_WORD_COMMANDS = new String[]{EXIT_COMMAND, LIST_COMMAND, SAVE_COMMAND};
     public static final String[] DOUBLE_WORD_COMMANDS = new String[]{COMPLETE_COMMAND, TODO_COMMAND, DELETE_COMMAND};
     public static final String[] TRIPLE_WORD_COMMANDS = new String[]{DEADLINE_COMMAND, EVENT_COMMAND};
 
@@ -92,64 +93,68 @@ public class Duke {
             actionWord = processedUserInput[0];
 
             switch (actionWord) {
-                case EXIT_COMMAND:
-                    break;
+            case EXIT_COMMAND:
+                break;
 
-                case LIST_COMMAND:
-                    printTasks(taskManager);
-                    break;
+            case LIST_COMMAND:
+                printTasks(taskManager);
+                break;
 
-                case COMPLETE_COMMAND:
-                    try {
-                        index = Integer.parseInt(processedUserInput[1]);
-                        if (index < 1 || index >= taskManager.getNumberOfTasks()) {
-                            throw new NumberFormatException();
-                        }
-                    } catch (NumberFormatException e) {
-                        printError(INDEX_VALUE_ERROR);
-                        continue;
+            case SAVE_COMMAND:
+                taskManager.outputTasks();
+                break;
+
+            case COMPLETE_COMMAND:
+                try {
+                    index = Integer.parseInt(processedUserInput[1]);
+                    if (index < 1 || index >= taskManager.getNumberOfTasks()) {
+                        throw new NumberFormatException();
                     }
-                    outputMessages = taskManager.completeTask(index);
-                    printMessage(outputMessages);
-                    break;
+                } catch (NumberFormatException e) {
+                    printError(INDEX_VALUE_ERROR);
+                    continue;
+                }
+                outputMessages = taskManager.completeTask(index);
+                printMessage(outputMessages);
+                break;
 
-                case DELETE_COMMAND:
-                    try {
-                        index = Integer.parseInt(processedUserInput[1]);
-                        if (index < 1 || index >= taskManager.getNumberOfTasks()) {
-                            throw new NumberFormatException();
-                        }
-                    } catch (NumberFormatException e) {
-                        printError(INDEX_VALUE_ERROR);
-                        continue;
+            case DELETE_COMMAND:
+                try {
+                    index = Integer.parseInt(processedUserInput[1]);
+                    if (index < 1 || index >= taskManager.getNumberOfTasks()) {
+                        throw new NumberFormatException();
                     }
+                } catch (NumberFormatException e) {
+                    printError(INDEX_VALUE_ERROR);
+                    continue;
+                }
 
-                    outputMessages = taskManager.deleteTask(index);
-                    printMessage(outputMessages);
-                    break;
+                outputMessages = taskManager.deleteTask(index);
+                printMessage(outputMessages);
+                break;
 
-                case TODO_COMMAND:
-                    description = processedUserInput[1];
-                    outputMessages = taskManager.addTodo(description);
-                    printMessage(outputMessages);
-                    break;
+            case TODO_COMMAND:
+                description = processedUserInput[1];
+                outputMessages = taskManager.addTodo(description);
+                printMessage(outputMessages);
+                break;
 
-                case DEADLINE_COMMAND:
-                    description = processedUserInput[1];
-                    timing = processedUserInput[2];
-                    outputMessages = taskManager.addDeadline(description, timing);
-                    printMessage(outputMessages);
-                    break;
+            case DEADLINE_COMMAND:
+                description = processedUserInput[1];
+                timing = processedUserInput[2];
+                outputMessages = taskManager.addDeadline(description, timing);
+                printMessage(outputMessages);
+                break;
 
-                case EVENT_COMMAND:
-                    description = processedUserInput[1];
-                    timing = processedUserInput[2];
-                    outputMessages = taskManager.addEvent(description, timing);
-                    printMessage(outputMessages);
-                    break;
+            case EVENT_COMMAND:
+                description = processedUserInput[1];
+                timing = processedUserInput[2];
+                outputMessages = taskManager.addEvent(description, timing);
+                printMessage(outputMessages);
+                break;
 
-                default:
-                    printError();
+            default:
+                printError();
             }
         }
         printExitMessage();
@@ -402,12 +407,12 @@ public class Duke {
 
     public static String getPrefix(String actionWord) {
         switch (actionWord) {
-            case DEADLINE_COMMAND:
-                return DEADLINE_PREFIX;
-            case EVENT_COMMAND:
-                return EVENT_PREFIX;
-            default:
-                return "";
+        case DEADLINE_COMMAND:
+            return DEADLINE_PREFIX;
+        case EVENT_COMMAND:
+            return EVENT_PREFIX;
+        default:
+            return "";
         }
     }
 }

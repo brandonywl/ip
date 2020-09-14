@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 
 public class TaskManager {
@@ -23,7 +25,7 @@ public class TaskManager {
     }
 
     public String[] addTodo(String task) {
-        Task newTask = new Task(task);
+        Todo newTask = new Todo(task);
         addTask(newTask);
         return generateAddTaskMessages();
     }
@@ -74,6 +76,30 @@ public class TaskManager {
                 String.format("Now you have %d tasks in the list.", getNumberOfTasks())
         };
     }
+    public void outputTasks() {
+        String home = System.getProperty("user.dir");
+        java.nio.file.Path saveFolderPath = java.nio.file.Paths.get(home, "data");
+        String saveFolder = saveFolderPath.toString();
+        java.nio.file.Path dumpFilePath = java.nio.file.Paths.get(saveFolder, "dump.txt");
+        String dumpFile = dumpFilePath.toString();
 
+        if (!java.nio.file.Files.exists(dumpFilePath)) {
+            File file = new File(saveFolder);
+            boolean success = file.mkdirs();
+            String message = success ? "Made directories" : "Failed to make directories";
+            System.out.println(message);
+        }
 
+        for (Task task : getTasks()) {
+
+        }
+
+        WriteFile writer = new WriteFile(dumpFile);
+        try {
+            writer.writeToFile("Hello");
+            System.out.println("Dump successful");
+        } catch (IOException e) {
+            System.out.println("Failed to dump file");
+        }
+    }
 }

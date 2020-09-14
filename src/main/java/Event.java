@@ -3,7 +3,7 @@
  * Adds the ability to have a timing (at).
  */
 public class Event extends Task {
-    String at;
+    private String at;
 
     public Event(String job, String at) {
         super(job);
@@ -12,6 +12,6 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        return String.format("[E][%s] %s (at: %s)", status, job, at);
+        return "[E]" + super.toString() + String.format("(at: %s)", at);
     }
 }
