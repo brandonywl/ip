@@ -49,6 +49,17 @@ public class TaskManager {
                 "\t" + tasks.get(index)};
     }
 
+    public String[] deleteTask(int userStipulatedIndex) {
+        int index = userStipulatedIndex - 1;
+        Task remTask = tasks.get(index);
+        tasks.remove(index);
+        return new String[] {
+                "Noted. I have removed this task:",
+                remTask.toString(),
+                String.format("Now you have %d tasks in the list.", getNumberOfTasks())
+        };
+    }
+
     /**
      * Generates a standard message to print when a new task is added. Retrieves the last task and prints it's
      * information.
