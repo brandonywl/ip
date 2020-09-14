@@ -21,4 +21,14 @@ public class WriteFile {
         print_line.printf(textLine + "\n");
         print_line.close();
     }
+
+    public void writeToFile(String[] textLines) throws IOException {
+        FileWriter write = new FileWriter(path, appendToFile);
+        PrintWriter print_line = new PrintWriter(write);
+
+        for(String textLine : textLines) {
+            print_line.printf(textLine + "\n");
+        }
+        print_line.close();
+    }
 }

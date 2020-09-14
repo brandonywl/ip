@@ -10,9 +10,18 @@ public class Deadline extends Task {
         this.deadline = deadline;
     }
 
+    public String getTiming() {
+        return deadline;
+    }
+
+    @Override
+    public String toPlainText() {
+        return "|D" + super.toPlainText() + String.format("%s|", deadline);
+    }
+
     @Override
     public String toString() {
-        return "[D]" + super.toString() + String.format("(by: %s)", deadline);
+        return "[D]" + super.toString() + String.format(" (by: %s)", deadline);
     }
 
 

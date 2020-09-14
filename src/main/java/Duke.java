@@ -107,7 +107,7 @@ public class Duke {
             case COMPLETE_COMMAND:
                 try {
                     index = Integer.parseInt(processedUserInput[1]);
-                    if (index < 1 || index >= taskManager.getNumberOfTasks()) {
+                    if (index < 1 || index > taskManager.getNumberOfTasks()) {
                         throw new NumberFormatException();
                     }
                 } catch (NumberFormatException e) {
@@ -121,7 +121,7 @@ public class Duke {
             case DELETE_COMMAND:
                 try {
                     index = Integer.parseInt(processedUserInput[1]);
-                    if (index < 1 || index >= taskManager.getNumberOfTasks()) {
+                    if (index < 1 || index > taskManager.getNumberOfTasks()) {
                         throw new NumberFormatException();
                     }
                 } catch (NumberFormatException e) {

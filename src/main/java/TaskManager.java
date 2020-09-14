@@ -76,6 +76,20 @@ public class TaskManager {
                 String.format("Now you have %d tasks in the list.", getNumberOfTasks())
         };
     }
+
+    public String[] getTasksAsStrings() {
+        String[] outputMessages = new String[getNumberOfTasks()];
+        int i = 0;
+        for (Task currTask : this.tasks) {
+            if (currTask == null) {
+                continue;
+            }
+            String task = currTask.toPlainText();
+            outputMessages[i++] = task;
+        }
+        return outputMessages;
+    }
+
     public void outputTasks() {
         String home = System.getProperty("user.dir");
         java.nio.file.Path saveFolderPath = java.nio.file.Paths.get(home, "data");
@@ -90,13 +104,11 @@ public class TaskManager {
             System.out.println(message);
         }
 
-        for (Task task : getTasks()) {
-
-        }
+        String[] outputMessages = getTasksAsStrings();
 
         WriteFile writer = new WriteFile(dumpFile);
         try {
-            writer.writeToFile("Hello");
+            writer.writeToFile(outputMessages);
             System.out.println("Dump successful");
         } catch (IOException e) {
             System.out.println("Failed to dump file");
