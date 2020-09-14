@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -19,16 +20,18 @@ public class Duke {
     // Command list
     public static final String EXIT_COMMAND = "BYE";
     public static final String LIST_COMMAND = "LIST";
+    public static final String SAVE_COMMAND = "SAVE";
     public static final String COMPLETE_COMMAND = "DONE";
     public static final String TODO_COMMAND = "TODO";
+    public static final String DELETE_COMMAND = "DELETE";
     public static final String DEADLINE_COMMAND = "DEADLINE";
     public static final String DEADLINE_PREFIX = "/by";
     public static final String EVENT_COMMAND = "EVENT";
     public static final String EVENT_PREFIX = "/at";
 
     // Consolidated Command List by Type
-    public static final String[] SINGLE_WORD_COMMANDS = new String[]{EXIT_COMMAND, LIST_COMMAND};
-    public static final String[] DOUBLE_WORD_COMMANDS = new String[]{COMPLETE_COMMAND, TODO_COMMAND};
+    public static final String[] SINGLE_WORD_COMMANDS = new String[]{EXIT_COMMAND, LIST_COMMAND, SAVE_COMMAND};
+    public static final String[] DOUBLE_WORD_COMMANDS = new String[]{COMPLETE_COMMAND, TODO_COMMAND, DELETE_COMMAND};
     public static final String[] TRIPLE_WORD_COMMANDS = new String[]{DEADLINE_COMMAND, EVENT_COMMAND};
 
     // Duke's Situational Messages
@@ -37,7 +40,7 @@ public class Duke {
     // Duke Error Messages
     public static final String NO_DESCRIPTION_ERROR = "Sorry! There seems to be a lack of description for the task you want to add!";
     public static final String NO_TIMING_ERROR = "Sorry! There seems to be a lack of timing for the task you want to add!";
-    public static final String INDEX_VALUE_ERROR = "Index is not a correct number!";
+    public static final String INDEX_VALUE_ERROR = "Index is not valid or is not an integer!";
     public static final String WRONG_PREFIX_ERROR = "You used the wrong prefix!";
     public static final String PREFIX_ERROR = "Please use %s to indicate the timing";
 
@@ -54,6 +57,7 @@ public class Duke {
         String description;
         String timing;
         String[] processedUserInput;
+        int index;
 
         // Introduce the bot after startup
         printIntroduction(LOGO);
@@ -96,15 +100,36 @@ public class Duke {
                 printTasks(taskManager);
                 break;
 
+            case SAVE_COMMAND:
+                taskManager.outputTasks();
+                break;
+
             case COMPLETE_COMMAND:
-                int index;
                 try {
                     index = Integer.parseInt(processedUserInput[1]);
+                    if (index < 1 || index >= taskManager.getNumberOfTasks()) {
+                        throw new NumberFormatException();
+                    }
                 } catch (NumberFormatException e) {
                     printError(INDEX_VALUE_ERROR);
                     continue;
                 }
                 outputMessages = taskManager.completeTask(index);
+                printMessage(outputMessages);
+                break;
+
+            case DELETE_COMMAND:
+                try {
+                    index = Integer.parseInt(processedUserInput[1]);
+                    if (index < 1 || index >= taskManager.getNumberOfTasks()) {
+                        throw new NumberFormatException();
+                    }
+                } catch (NumberFormatException e) {
+                    printError(INDEX_VALUE_ERROR);
+                    continue;
+                }
+
+                outputMessages = taskManager.deleteTask(index);
                 printMessage(outputMessages);
                 break;
 
@@ -185,8 +210,8 @@ public class Duke {
         printMessage(new String[]{"Error!", "", message});
     }
 
-    public static void printErrors(String[] messages){
-        String[] errorMessages = new String[2+messages.length];
+    public static void printErrors(String[] messages) {
+        String[] errorMessages = new String[2 + messages.length];
         errorMessages[0] = "Error!";
         errorMessages[1] = "";
         System.arraycopy(messages, 0, errorMessages, 2, messages.length);
@@ -212,15 +237,15 @@ public class Duke {
      * @param taskManager TaskManager Object used to retrieve a list of all tasks as well as number of tasks.
      */
     public static void printTasks(TaskManager taskManager) {
-        Task[] tasks = taskManager.getTasks();
+        ArrayList<Task> tasks = taskManager.getTasks();
         int numOfTasks = taskManager.getNumberOfTasks();
         String[] messages = new String[numOfTasks];
 
         if (numOfTasks == 0) {
-            messages = new String[] {EMPTY_TASK_LIST_MESSAGE};
+            messages = new String[]{EMPTY_TASK_LIST_MESSAGE};
         }
         for (int i = 0; i < numOfTasks; i++) {
-            String outputMessage = String.format("%d.\t%s", i + 1, tasks[i].toString());
+            String outputMessage = String.format("%d.\t%s", i + 1, tasks.get(i).toString());
             messages[i] = outputMessage;
         }
         printMessage(messages);
@@ -243,7 +268,7 @@ public class Duke {
                         description
                 };
             } catch (NoSuchFieldException e) {
-                String[] errorMessages = new String[] {
+                String[] errorMessages = new String[]{
                         NO_DESCRIPTION_ERROR,
                         NO_DESCRIPTION_SOLUTION
                 };
@@ -261,7 +286,7 @@ public class Duke {
                         timing
                 };
             } catch (NoSuchFieldException e) {
-                String[] errorMessages = new String[] {
+                String[] errorMessages = new String[]{
                         NO_DESCRIPTION_ERROR,
                         NO_DESCRIPTION_SOLUTION
                 };
@@ -272,7 +297,7 @@ public class Duke {
                 String prefix = getPrefix(actionWord);
 
                 if (!prefix.isBlank()) {
-                    errorMessages = new String[] {
+                    errorMessages = new String[]{
                             NO_TIMING_ERROR,
                             String.format(PREFIX_ERROR, prefix)
                     };
@@ -287,7 +312,7 @@ public class Duke {
                 String prefix = getPrefix(actionWord);
 
                 if (!prefix.isBlank()) {
-                    errorMessages = new String[] {
+                    errorMessages = new String[]{
                             WRONG_PREFIX_ERROR,
                             String.format("Please use %s to indicate the timing", prefix)
                     };
@@ -381,7 +406,7 @@ public class Duke {
     }
 
     public static String getPrefix(String actionWord) {
-        switch(actionWord) {
+        switch (actionWord) {
         case DEADLINE_COMMAND:
             return DEADLINE_PREFIX;
         case EVENT_COMMAND:

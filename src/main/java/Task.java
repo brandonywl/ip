@@ -2,8 +2,8 @@
  * Task Class used to hold the job description as well as the status of the job.
  */
 public class Task {
-    String job;
-    String status;
+    private String job;
+    private String status;
 
     public Task(String job) {
         this.job = job;
@@ -21,6 +21,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return String.format("[T][%s] %s", status, job);
+        return String.format("[%s] %s", status, job);
     }
 }

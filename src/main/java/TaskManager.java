@@ -1,88 +1,71 @@
+import java.io.IOException;
+import java.io.File;
+import java.util.ArrayList;
+
 public class TaskManager {
-    private final int taskLimit;
-    private int numberOfTasks;
-    protected Task[] tasks;
+    private final ArrayList<Task> tasks = new ArrayList<>();
 
-    TaskManager(int taskLimit){
-        this.taskLimit = taskLimit;
-        tasks = new Task[taskLimit];
-        numberOfTasks = 0;
+    TaskManager() {
     }
 
-    TaskManager(){
-        this(100);
-    }
-
-    public Task[] getTasks() {
+    public ArrayList<Task> getTasks() {
         return tasks;
     }
 
     public Task getLatestTask() {
-        return tasks[getNumberOfTasks() - 1];
+        return tasks.get(tasks.size() - 1);
     }
 
     public int getNumberOfTasks() {
-        return numberOfTasks;
-    }
-
-    public void addNumberOfTask() {
-        numberOfTasks += 1;
+        return tasks.size();
     }
 
     protected void addTask(Task task) {
-        tasks[getNumberOfTasks()] = task;
-        addNumberOfTask();
+        tasks.add(task);
     }
 
     public String[] addTodo(String task) {
-        if (isUnderLimit()) {
-            Task newTask = new Task(task);
-            addTask(newTask);
-            return generateAddTaskMessages();
-
-        } else {
-            return new String[] {"Error. Maximum number of tasks hit!"};
-        }
+        Todo newTask = new Todo(task);
+        addTask(newTask);
+        return generateAddTaskMessages();
     }
 
     public String[] addDeadline(String task, String deadline) {
-        if (isUnderLimit()) {
-            Deadline newDeadline = new Deadline(task, deadline);
-            addTask(newDeadline);
-            return generateAddTaskMessages();
-
-        } else {
-            return new String[] {"Error. Maximum number of tasks hit!"};
-        }
+        Deadline newDeadline = new Deadline(task, deadline);
+        addTask(newDeadline);
+        return generateAddTaskMessages();
 
     }
 
     public String[] addEvent(String task, String startTime) {
-        if (isUnderLimit()) {
-            Event newEvent = new Event(task, startTime);
-            addTask(newEvent);
-            return generateAddTaskMessages();
-
-        } else {
-            return new String[] {"Error. Maximum number of tasks hit!"};
-        }
-    }
-
-    public boolean isUnderLimit() {
-        return getNumberOfTasks() < taskLimit;
+        Event newEvent = new Event(task, startTime);
+        addTask(newEvent);
+        return generateAddTaskMessages();
     }
 
     public String[] completeTask(int userStipulatedIndex) {
         int index = userStipulatedIndex - 1;
-        tasks[index].complete();
+        tasks.get(index).complete();
         return new String[]{
                 "Nice! I've marked this task as done:",
-                "\t" + tasks[index]};
+                "\t" + tasks.get(index)};
+    }
+
+    public String[] deleteTask(int userStipulatedIndex) {
+        int index = userStipulatedIndex - 1;
+        Task remTask = tasks.get(index);
+        tasks.remove(index);
+        return new String[] {
+                "Noted. I have removed this task:",
+                remTask.toString(),
+                String.format("Now you have %d tasks in the list.", getNumberOfTasks())
+        };
     }
 
     /**
      * Generates a standard message to print when a new task is added. Retrieves the last task and prints it's
      * information.
+     *
      * @return Returns a standard String Array to be printed.
      */
     public String[] generateAddTaskMessages() {
@@ -93,6 +76,30 @@ public class TaskManager {
                 String.format("Now you have %d tasks in the list.", getNumberOfTasks())
         };
     }
+    public void outputTasks() {
+        String home = System.getProperty("user.dir");
+        java.nio.file.Path saveFolderPath = java.nio.file.Paths.get(home, "data");
+        String saveFolder = saveFolderPath.toString();
+        java.nio.file.Path dumpFilePath = java.nio.file.Paths.get(saveFolder, "dump.txt");
+        String dumpFile = dumpFilePath.toString();
 
+        if (!java.nio.file.Files.exists(dumpFilePath)) {
+            File file = new File(saveFolder);
+            boolean success = file.mkdirs();
+            String message = success ? "Made directories" : "Failed to make directories";
+            System.out.println(message);
+        }
 
+        for (Task task : getTasks()) {
+
+        }
+
+        WriteFile writer = new WriteFile(dumpFile);
+        try {
+            writer.writeToFile("Hello");
+            System.out.println("Dump successful");
+        } catch (IOException e) {
+            System.out.println("Failed to dump file");
+        }
+    }
 }
