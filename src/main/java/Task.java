@@ -4,6 +4,7 @@
 public class Task {
     private final String job;
     private boolean status;
+    // TODO: Set a string representation of Status that can be viewed on Unix.
     private String statusString;
 
     public Task(String job) {
