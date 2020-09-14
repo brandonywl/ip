@@ -100,6 +100,9 @@ public class Duke {
                 int index;
                 try {
                     index = Integer.parseInt(processedUserInput[1]);
+                    if (index < 1 || index > taskManager.getNumberOfTasks()) {
+                        throw new NumberFormatException();
+                    }
                 } catch (NumberFormatException e) {
                     printError(INDEX_VALUE_ERROR);
                     continue;

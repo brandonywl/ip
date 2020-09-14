@@ -10,8 +10,17 @@ public class Event extends Task {
         this.at = at;
     }
 
+    public String getTiming() {
+        return at;
+    }
+
+    @Override
+    public String toPlainText() {
+        return "|E" + super.toPlainText() + String.format("%s|", at);
+    }
+
     @Override
     public String toString() {
-        return String.format("[E][%s] %s (at: %s)", status, job, at);
+        return "[E]" + super.toString() + String.format(" (at: %s)", at);
     }
 }
