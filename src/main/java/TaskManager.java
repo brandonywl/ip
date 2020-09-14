@@ -1,88 +1,58 @@
+import java.util.ArrayList;
+
 public class TaskManager {
-    private final int taskLimit;
-    private int numberOfTasks;
-    protected Task[] tasks;
+    private final ArrayList<Task> tasks = new ArrayList<>();
 
-    TaskManager(int taskLimit){
-        this.taskLimit = taskLimit;
-        tasks = new Task[taskLimit];
-        numberOfTasks = 0;
+    TaskManager() {
     }
 
-    TaskManager(){
-        this(100);
-    }
-
-    public Task[] getTasks() {
+    public ArrayList<Task> getTasks() {
         return tasks;
     }
 
     public Task getLatestTask() {
-        return tasks[getNumberOfTasks() - 1];
+        return tasks.get(tasks.size() - 1);
     }
 
     public int getNumberOfTasks() {
-        return numberOfTasks;
-    }
-
-    public void addNumberOfTask() {
-        numberOfTasks += 1;
+        return tasks.size();
     }
 
     protected void addTask(Task task) {
-        tasks[getNumberOfTasks()] = task;
-        addNumberOfTask();
+        tasks.add(task);
     }
 
     public String[] addTodo(String task) {
-        if (isUnderLimit()) {
-            Task newTask = new Task(task);
-            addTask(newTask);
-            return generateAddTaskMessages();
-
-        } else {
-            return new String[] {"Error. Maximum number of tasks hit!"};
-        }
+        Task newTask = new Task(task);
+        addTask(newTask);
+        return generateAddTaskMessages();
     }
 
     public String[] addDeadline(String task, String deadline) {
-        if (isUnderLimit()) {
-            Deadline newDeadline = new Deadline(task, deadline);
-            addTask(newDeadline);
-            return generateAddTaskMessages();
-
-        } else {
-            return new String[] {"Error. Maximum number of tasks hit!"};
-        }
+        Deadline newDeadline = new Deadline(task, deadline);
+        addTask(newDeadline);
+        return generateAddTaskMessages();
 
     }
 
     public String[] addEvent(String task, String startTime) {
-        if (isUnderLimit()) {
-            Event newEvent = new Event(task, startTime);
-            addTask(newEvent);
-            return generateAddTaskMessages();
-
-        } else {
-            return new String[] {"Error. Maximum number of tasks hit!"};
-        }
-    }
-
-    public boolean isUnderLimit() {
-        return getNumberOfTasks() < taskLimit;
+        Event newEvent = new Event(task, startTime);
+        addTask(newEvent);
+        return generateAddTaskMessages();
     }
 
     public String[] completeTask(int userStipulatedIndex) {
         int index = userStipulatedIndex - 1;
-        tasks[index].complete();
+        tasks.get(index).complete();
         return new String[]{
                 "Nice! I've marked this task as done:",
-                "\t" + tasks[index]};
+                "\t" + tasks.get(index)};
     }
 
     /**
      * Generates a standard message to print when a new task is added. Retrieves the last task and prints it's
      * information.
+     *
      * @return Returns a standard String Array to be printed.
      */
     public String[] generateAddTaskMessages() {
