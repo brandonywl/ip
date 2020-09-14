@@ -39,7 +39,7 @@ public class TaskManager {
 
     public String[] addTodo(String task) {
         if (isUnderLimit()) {
-            Task newTask = new Task(task);
+            Todo newTask = new Todo(task);
             addTask(newTask);
             return generateAddTaskMessages();
 
@@ -100,7 +100,10 @@ public class TaskManager {
     public String[] getTasksAsStrings() {
         String[] outputMessages = new String[getNumberOfTasks()];
         int i = 0;
-        for (Task currTask : getTasks()) {
+        for (Task currTask : this.tasks) {
+            if (currTask == null) {
+                continue;
+            }
             String task = currTask.toPlainText();
             outputMessages[i++] = task;
         }

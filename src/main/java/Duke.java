@@ -19,6 +19,7 @@ public class Duke {
     // Command list
     public static final String EXIT_COMMAND = "BYE";
     public static final String LIST_COMMAND = "LIST";
+    public static final String SAVE_COMMAND = "SAVE";
     public static final String COMPLETE_COMMAND = "DONE";
     public static final String TODO_COMMAND = "TODO";
     public static final String DEADLINE_COMMAND = "DEADLINE";
@@ -27,7 +28,7 @@ public class Duke {
     public static final String EVENT_PREFIX = "/at";
 
     // Consolidated Command List by Type
-    public static final String[] SINGLE_WORD_COMMANDS = new String[]{EXIT_COMMAND, LIST_COMMAND};
+    public static final String[] SINGLE_WORD_COMMANDS = new String[]{EXIT_COMMAND, LIST_COMMAND, SAVE_COMMAND};
     public static final String[] DOUBLE_WORD_COMMANDS = new String[]{COMPLETE_COMMAND, TODO_COMMAND};
     public static final String[] TRIPLE_WORD_COMMANDS = new String[]{DEADLINE_COMMAND, EVENT_COMMAND};
 
@@ -94,6 +95,10 @@ public class Duke {
 
             case LIST_COMMAND:
                 printTasks(taskManager);
+                break;
+
+            case SAVE_COMMAND:
+                taskManager.outputTasks();
                 break;
 
             case COMPLETE_COMMAND:
