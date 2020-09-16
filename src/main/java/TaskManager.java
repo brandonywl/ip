@@ -24,42 +24,43 @@ public class TaskManager {
         tasks.add(task);
     }
 
-    public String[] addTodo(String task) {
+    public ArrayList<String> addTodo(String task) {
         Todo newTask = new Todo(task);
         addTask(newTask);
         return generateAddTaskMessages();
     }
 
-    public String[] addDeadline(String task, String deadline) {
+    public ArrayList<String> addDeadline(String task, String deadline) {
         Deadline newDeadline = new Deadline(task, deadline);
         addTask(newDeadline);
         return generateAddTaskMessages();
 
     }
 
-    public String[] addEvent(String task, String startTime) {
+    public ArrayList<String> addEvent(String task, String startTime) {
         Event newEvent = new Event(task, startTime);
         addTask(newEvent);
         return generateAddTaskMessages();
     }
 
-    public String[] completeTask(int userStipulatedIndex) {
+    public ArrayList<String> completeTask(int userStipulatedIndex) {
         int index = userStipulatedIndex - 1;
         tasks.get(index).complete();
-        return new String[]{
-                "Nice! I've marked this task as done:",
-                "\t" + tasks.get(index)};
+        ArrayList<String> outputMessage = new ArrayList<>();
+        outputMessage.add("Nice! I've marked this task as done:");
+        outputMessage.add("\t" + tasks.get(index));
+        return outputMessage;
     }
 
-    public String[] deleteTask(int userStipulatedIndex) {
+    public ArrayList<String> deleteTask(int userStipulatedIndex) {
         int index = userStipulatedIndex - 1;
         Task remTask = tasks.get(index);
         tasks.remove(index);
-        return new String[] {
-                "Noted. I have removed this task:",
-                remTask.toString(),
-                String.format("Now you have %d tasks in the list.", getNumberOfTasks())
-        };
+        ArrayList<String> outputMessage = new ArrayList<>();
+        outputMessage.add("Noted. I have removed this task:");
+        outputMessage.add(remTask.toString());
+        outputMessage.add(String.format("Now you have %d tasks in the list.", getNumberOfTasks()));
+        return outputMessage;
     }
 
     /**
@@ -68,13 +69,13 @@ public class TaskManager {
      *
      * @return Returns a standard String Array to be printed.
      */
-    public String[] generateAddTaskMessages() {
+    public ArrayList<String> generateAddTaskMessages() {
         Task latestTask = getLatestTask();
-        return new String[]{
-                "Got it. I've added this task:",
-                "\t" + latestTask,
-                String.format("Now you have %d tasks in the list.", getNumberOfTasks())
-        };
+        ArrayList<String> outputMessage = new ArrayList<>();
+        outputMessage.add("Got it. I've added this task:");
+        outputMessage.add("\t" + latestTask);
+        outputMessage.add(String.format("Now you have %d tasks in the list.", getNumberOfTasks()));
+        return outputMessage;
     }
 
     public String[] getTasksAsStrings() {
@@ -85,7 +86,8 @@ public class TaskManager {
                 continue;
             }
             String task = currTask.toPlainText();
-            outputMessages[i++] = task;
+            outputMessages[i] = task;
+            i++;
         }
         return outputMessages;
     }
