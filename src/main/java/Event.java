@@ -10,6 +10,11 @@ public class Event extends Task {
         this.at = at;
     }
 
+    public Event(String job, boolean status, String at) {
+        super(job, status);
+        this.at = at;
+    }
+
     public String getTiming() {
         return at;
     }

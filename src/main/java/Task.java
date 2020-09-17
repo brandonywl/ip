@@ -12,6 +12,13 @@ public class Task {
         incomplete();
     }
 
+    public Task(String job, boolean status) {
+        this(job);
+        if (status) {
+            complete();
+        }
+    }
+
     // Unicode representation of a tick
     public void complete() {
         this.status = true;

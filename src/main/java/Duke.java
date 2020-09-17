@@ -59,10 +59,11 @@ public class Duke {
         String[] processedUserInput;
         int index;
 
+        // TODO: In CLI, up and down arrow inputs are parsed by the parser.
         // Introduce the bot after startup
         printIntroduction(LOGO);
         while (!currentUserInput.equalsIgnoreCase(EXIT_COMMAND)) {
-            String[] outputMessages;
+            ArrayList<String> outputMessages;
             currentUserInput = sc.nextLine().strip();
             /*
              * Cases
@@ -137,6 +138,7 @@ public class Duke {
                 description = processedUserInput[1];
                 outputMessages = taskManager.addTodo(description);
                 printMessage(outputMessages);
+                taskManager.outputTasks();
                 break;
 
             case DEADLINE_COMMAND:
@@ -144,6 +146,7 @@ public class Duke {
                 timing = processedUserInput[2];
                 outputMessages = taskManager.addDeadline(description, timing);
                 printMessage(outputMessages);
+                taskManager.outputTasks();
                 break;
 
             case EVENT_COMMAND:
@@ -151,6 +154,7 @@ public class Duke {
                 timing = processedUserInput[2];
                 outputMessages = taskManager.addEvent(description, timing);
                 printMessage(outputMessages);
+                taskManager.outputTasks();
                 break;
 
             default:
@@ -224,6 +228,14 @@ public class Duke {
      * @param messages An array of messages to be printed
      */
     public static void printMessage(String[] messages) {
+        printDivider();
+        for (String message : messages) {
+            System.out.println(message);
+        }
+        printDivider();
+    }
+
+    public static void printMessage(ArrayList<String> messages) {
         printDivider();
         for (String message : messages) {
             System.out.println(message);

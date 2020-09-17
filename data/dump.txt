@@ -1,3 +1,2 @@
-|T|false|Read Books|
-|E|false|sleep|9pm|
-|D|true|meeting|5pm|
+|T|false|hair|
+|E|false|CS2113 lecture on Friday 18 September 2020|4 pm to 6pm|
