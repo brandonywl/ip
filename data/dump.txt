@@ -1,2 +1,3 @@
-|T|false|read books|
-|E|false|meeting|5pm|
+|T|false|Read Books|
+|E|false|sleep|9pm|
+|D|true|meeting|5pm|
