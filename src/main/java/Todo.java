@@ -3,6 +3,10 @@ public class Todo extends Task {
         super(task);
     }
 
+    public Todo (String task, boolean status) {
+        super(task, status);
+    }
+
     @Override
     public String toPlainText() {
         return "|T" + super.toPlainText();

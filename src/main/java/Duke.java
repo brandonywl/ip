@@ -59,6 +59,7 @@ public class Duke {
         String[] processedUserInput;
         int index;
 
+        // TODO: In CLI, up and down arrow inputs are parsed by the parser.
         // Introduce the bot after startup
         printIntroduction(LOGO);
         while (!currentUserInput.equalsIgnoreCase(EXIT_COMMAND)) {

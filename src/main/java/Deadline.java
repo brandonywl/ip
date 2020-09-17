@@ -10,6 +10,11 @@ public class Deadline extends Task {
         this.deadline = deadline;
     }
 
+    public Deadline(String job, boolean status, String deadline) {
+        super(job, status);
+        this.deadline = deadline;
+    }
+
     public String getTiming() {
         return deadline;
     }
