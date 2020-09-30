@@ -128,8 +128,8 @@ public class TaskManager {
     public void findTask(String keyword) {
         ArrayList<Task> subset = new ArrayList<>();
         for (Task task : tasks) {
-            String job = task.getJob();
-            if (job.contains(keyword)) {
+            String job = task.getJob().toLowerCase();
+            if (job.contains(keyword.toLowerCase())) {
                 subset.add(task);
             }
         }

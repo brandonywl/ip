@@ -1,5 +1,7 @@
-|T|false|hair|
 |E|false|CS2113 lecture on Friday 18 September 2020|4 pm to 6pm|
-|T|false|hair|
 |E|false|buy dinner|2pm|
 |D|false|hair|9pm|
+|D|false|homework|2pm|
+|T|false|cs2113 tp repository|
+|D|false|cs2113 jar file|2 Oct 2359 hrs|
+|E|false|cs2113 tp meeting|Monday 6pm|
