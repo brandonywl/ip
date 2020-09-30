@@ -5,20 +5,22 @@ import Duke.TaskManager.TaskManager;
 import Duke.TaskTypes.Task;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
+/**
+ *  Provides methods to print onto the CLI.
+ */
 public class Printer {
-    /**
-     * Prints a line to isolate Duke's replies.
-     */
-    public static void printDivider() {
+
+    private static void printDivider() {
         String line = "------------------------------------------------";
         System.out.println(line);
     }
 
     /**
-     * Prints the introduction given a text-based logo.
+     * Prints out the logo of the chat bot between two dividers.
      *
-     * @param logo String that represents the logo of the chat-bot.
+     * @param logo Logo of the chat bot
      */
     public static void printIntroduction(String logo) {
         printDivider();
@@ -27,17 +29,9 @@ public class Printer {
         printDivider();
     }
 
-    /**
-     * Prints an exit message.
-     */
-    public static void printExitMessage() {
-        printMessage("Bye. Hope to see you again soon!");
-    }
-
-    /**
-     * General purpose method to print a string between two dividers.
+    /** Prints a message between two dividers
      *
-     * @param message Message to be printed.
+     * @param message Message to be printed
      */
     public static void printMessage(String message) {
         printDivider();
@@ -46,28 +40,8 @@ public class Printer {
     }
 
     /**
-     * Specialized printMessage function to throw an error message
-     */
-    public static void printError() {
-        printMessage(new String[]{"Error!", "", "Unknown Command! Try again!"});
-    }
-
-    public static void printError(String message) {
-        printMessage(new String[]{"Error!", "", message});
-    }
-
-    public static void printErrors(String[] messages) {
-        String[] errorMessages = new String[2 + messages.length];
-        errorMessages[0] = "Error!";
-        errorMessages[1] = "";
-        System.arraycopy(messages, 0, errorMessages, 2, messages.length);
-        printMessage(errorMessages);
-    }
-
-    /**
-     * General purpose method to print multiple strings between two dividers.
-     *
-     * @param messages An array of messages to be printed
+     * Prints messages between two dividers
+     * @param messages String Array Type. Allows printing of more than one line between the dividers.
      */
     public static void printMessage(String[] messages) {
         printDivider();
@@ -77,6 +51,10 @@ public class Printer {
         printDivider();
     }
 
+    /**
+     * Prints messages between two dividers
+     * @param messages ArrayList Type. Allows printing of more than one line between the dividers.
+     */
     public static void printMessage(ArrayList<String> messages) {
         printDivider();
         for (String message : messages) {
@@ -85,6 +63,12 @@ public class Printer {
         printDivider();
     }
 
+    /**
+     *  Prints a standard error message upon exit command
+     */
+    public static void printExitMessage() {
+        printMessage("Bye. Hope to see you again soon!");
+    }
 
     public static void printTasks(ArrayList<Task> tasks) {
         int numOfTasks = tasks.size();
@@ -93,11 +77,37 @@ public class Printer {
         if (numOfTasks == 0) {
             messages.add(Messages.EMPTY_TASK_LIST_MESSAGE);
         }
+        
         for (int i = 0; i < numOfTasks; i++) {
             String outputMessage = String.format("%d.\t%s", i + 1, tasks.get(i).toString());
             messages.add(outputMessage);
         }
         messages.add(0, "Here are the tasks we found!\n");
         printMessage(messages);
+    }
+
+    /**
+     *  Prints a standard error message of an unknown command.
+     */
+    public static void printError() {
+        printMessage(new String[]{"Error!", "", "Unknown Command! Try again!"});
+    }
+
+    /**
+     * Prints a specified error message.
+     * @param message Error message based on situation.
+     */
+    public static void printError(String message) {
+        printMessage(new String[]{"Error!", "", message});
+    }
+
+    /**
+     * Provides a overloaded method that allows for multiple error messages as arguments.
+     * @param messages Error messages.
+     */
+    public static void printError(String... messages) {
+        ArrayList<String> errors = new ArrayList<>();
+        Collections.addAll(errors, messages);
+        printMessage(errors);
     }
 }

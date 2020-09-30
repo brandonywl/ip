@@ -1,7 +1,7 @@
 package Duke.TaskTypes;
 
 /**
- * Duke.TaskTypes.Task Class used to hold the job description as well as the status of the job.
+ * Base class of Tasks
  */
 public class Task {
     private final String job;
@@ -21,21 +21,28 @@ public class Task {
         }
     }
 
-    // Unicode representation of a tick
+    /**
+     * Set status of the task to complete
+     * Set string representation to a tick (UTF-8)
+     */
     public void complete() {
         this.status = true;
         this.statusString = "\u2713";
     }
-    // Unicode representation of a cross
+
+    /**
+     * Set status of the task to incomplete
+     * Set string representation to a cross (UTF-8)
+     */
     public void incomplete() {
         this.status = false;
         this.statusString = "\u2717";
     }
 
-    public String getJob() {
-        return job;
-    }
-
+    /**
+     * Convert the string to plain-text format for storing in a txt file.
+     * @return Task in String format.
+     */
     public String toPlainText() {
         return String.format("|%b|%s|", this.status, this.job);
     }

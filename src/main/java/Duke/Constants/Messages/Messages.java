@@ -1,5 +1,8 @@
 package Duke.Constants.Messages;
 
+/**
+ * Provides a enum that contains standard messages.
+ */
 public enum Messages {
     ;
     // Logo

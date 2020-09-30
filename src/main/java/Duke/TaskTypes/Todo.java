@@ -1,5 +1,8 @@
 package Duke.TaskTypes;
 
+/**
+ * Extends Tasks to have a To-do type
+ */
 public class Todo extends Task {
     public Todo (String task) {
         super(task);

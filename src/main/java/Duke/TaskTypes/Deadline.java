@@ -1,11 +1,11 @@
 package Duke.TaskTypes;
 
 /**
- * Duke.TaskTypes.Deadline task which inherits from Duke.TaskTypes.Task.
- * Adds the ability to have a deadline (by).
+ * Extends Tasks to have a Deadline type
+ * Adds ability to have a deadline (by) timing.
  */
 public class Deadline extends Task {
-    private String deadline;
+    private final String deadline;
 
     public Deadline(String job, String deadline) {
         super(job);
@@ -17,10 +17,10 @@ public class Deadline extends Task {
         this.deadline = deadline;
     }
 
-    public String getTiming() {
-        return deadline;
-    }
-
+    /**
+     * Converts the task to a plain-text format to be stored in a txt file.
+     * @return Plain-text format Task.
+     */
     @Override
     public String toPlainText() {
         return "|D" + super.toPlainText() + String.format("%s|", deadline);

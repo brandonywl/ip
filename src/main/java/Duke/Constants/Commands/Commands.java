@@ -1,5 +1,8 @@
 package Duke.Constants.Commands;
 
+/**
+ * Provides an enum that holds all the command action words as well as their type in the string array.
+ */
 public enum Commands {
     ;
 
