@@ -1,5 +1,7 @@
+package Duke.TaskTypes;
+
 /**
- * Event task which inherits from Task.
+ * Duke.TaskTypes.Event task which inherits from Duke.TaskTypes.Task.
  * Adds the ability to have a timing (at).
  */
 public class Event extends Task {

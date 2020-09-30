@@ -1,14 +1,25 @@
+import Duke.Data.FileHandler;
+import Duke.Exceptions.WrongPrefixException;
+import Duke.TaskTypes.Deadline;
+import Duke.TaskTypes.Event;
+import Duke.TaskTypes.Task;
+import Duke.TaskTypes.Todo;
+
 import java.io.*;
 import java.util.ArrayList;
 
+
 public class TaskManager {
     private final ArrayList<Task> tasks = new ArrayList<>();
+    private FileHandler fileHandler = new FileHandler();
+    private final static String dumpLoc = "data/dump.txt";
 
     TaskManager() {
         try {
+            fileHandler = new FileHandler(dumpLoc);
             importTask();
         } catch (WrongPrefixException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -114,44 +125,19 @@ public class TaskManager {
     }
 
     public void outputTasks() {
-        String dumpFile = checkDumpMade();
-
+        fileHandler.directoryExists();
         String[] outputMessages = getTasksAsStrings();
-
-        WriteFile writer = new WriteFile(dumpFile);
         try {
-            writer.writeToFile(outputMessages);
-            System.out.println("Dump successful");
+            fileHandler.writeToFile(outputMessages, false);
         } catch (IOException e) {
-            System.out.println("Failed to dump file");
+            e.printStackTrace();
         }
     }
 
     public void importTask() throws WrongPrefixException {
-        String dumpFile = checkDumpMade();
-        File file;
-        FileReader fr;
-        BufferedReader br;
-        StringBuffer sb;
-        try {
-            file = new File(dumpFile);
-            fr = new FileReader(file);
-            br = new BufferedReader(fr);
-            sb = new StringBuffer();
-            String nextLine;
+        String dumpData = fileHandler.readFromFile();
+        String[] tasks = dumpData.split("\n");
 
-            while ((nextLine = br.readLine()) != null) {
-                sb.append(nextLine);
-                sb.append("\n");
-            }
-            fr.close();
-
-        } catch (IOException e) {
-            System.out.println(e);
-            return;
-        }
-
-        String[] tasks = sb.toString().split("\n");
         for (String line : tasks) {
             String[] attributes = line.split("\\|");
             String taskType = attributes[1];
@@ -175,21 +161,5 @@ public class TaskManager {
                 throw new WrongPrefixException();
             }
         }
-    }
-
-    public String checkDumpMade() {
-        String home = System.getProperty("user.dir");
-        java.nio.file.Path saveFolderPath = java.nio.file.Paths.get(home, "data");
-        String saveFolder = saveFolderPath.toString();
-        java.nio.file.Path dumpFilePath = java.nio.file.Paths.get(saveFolder, "dump.txt");
-        String dumpFile = dumpFilePath.toString();
-
-        if (!java.nio.file.Files.exists(dumpFilePath)) {
-            File file = new File(saveFolder);
-            boolean success = file.mkdirs();
-            String message = success ? "Made directories" : "Failed to make directories";
-            System.out.println(message);
-        }
-        return dumpFile;
     }
 }
