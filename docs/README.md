@@ -1,20 +1,21 @@
 # User Guide
 
 ## Features 
-- Single Word Commands
+Commands are all case-insensitive.
+- <u>Single-Attribute Commands</u>
     - Exit
     - List
     - Save
-- Double Word Commands
+- <u>Two-Attribute Commands</u>
     - Done
     - Delete
     - Find
     - Todo
-- Triple Word Commands
+- <u>Three-Attribute Commands </u>
     - Deadline
     - Event
-
-### Single Word Commands
+<br><br>
+### Single-Attribute Commands
 #### Exit
 Exits Duke.
 
@@ -68,8 +69,8 @@ save
 Done!
 ------------------------------------------------
 ```
-
-### Double Word Commands
+<br><br>
+### Two-Attribute Commands
 #### Done
 Sets a specific task to be completed.
 Input index should be the one from list command.
@@ -147,8 +148,8 @@ Now you have 5 tasks in the list.
 ------------------------------------------------
 
 ```
-
-### Triple Word Commands
+<Br><
+### Three-Attribute Commands
 Triple word commands requires a specfier after the descriptor before specifying a time for the tasks.
 #### Deadline
 Creates a Deadline task and store it in Duke.
