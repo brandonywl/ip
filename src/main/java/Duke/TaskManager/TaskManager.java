@@ -7,6 +7,7 @@ import Duke.TaskTypes.Deadline;
 import Duke.TaskTypes.Event;
 import Duke.TaskTypes.Task;
 import Duke.TaskTypes.Todo;
+import Duke.UI.Printer;
 
 import java.util.ArrayList;
 
@@ -75,6 +76,17 @@ public class TaskManager {
         Event newEvent = new Event(task, status, startTime);
         addTask(newEvent);
         generateAddTaskMessages();
+    }
+
+    public void findTask(String keyword) {
+        ArrayList<Task> subset = new ArrayList<>();
+        for (Task task : tasks) {
+            String job = task.getJob();
+            if (job.contains(keyword)) {
+                subset.add(task);
+            }
+        }
+        Printer.printTasks(subset);
     }
 
     public ArrayList<String> completeTask(int userStipulatedIndex) {

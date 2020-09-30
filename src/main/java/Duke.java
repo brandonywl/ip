@@ -5,6 +5,7 @@ import Duke.Constants.Messages.Messages;
 import Duke.Exceptions.NoInputTimingException;
 import Duke.Exceptions.WrongPrefixException;
 import Duke.TaskManager.TaskManager;
+import Duke.TaskTypes.Task;
 import Duke.UI.Printer;
 
 import java.util.ArrayList;
@@ -71,7 +72,8 @@ public class Duke {
                 break;
 
             case Commands.LIST_COMMAND:
-                Printer.printTasks(taskManager);
+                ArrayList<Task> tasks = taskManager.getTasks();
+                Printer.printTasks(tasks);
                 break;
 
             case Commands.SAVE_COMMAND:
@@ -106,6 +108,10 @@ public class Duke {
 
                 outputMessages = taskManager.deleteTask(index);
                 Printer.printMessage(outputMessages);
+                break;
+
+            case Commands.FIND_COMMAND:
+                taskManager.findTask(processedUserInput[1]);
                 break;
 
             case Commands.TODO_COMMAND:

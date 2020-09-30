@@ -85,23 +85,19 @@ public class Printer {
         printDivider();
     }
 
-    /**
-     * Method to print all tasks stored inside the Duke.TaskTypes.Task Manager
-     *
-     * @param taskManager Duke.TaskManager.TaskManager Object used to retrieve a list of all tasks as well as number of tasks.
-     */
-    public static void printTasks(TaskManager taskManager) {
-        ArrayList<Task> tasks = taskManager.getTasks();
-        int numOfTasks = taskManager.getNumberOfTasks();
-        String[] messages = new String[numOfTasks];
+
+    public static void printTasks(ArrayList<Task> tasks) {
+        int numOfTasks = tasks.size();
+        ArrayList<String> messages = new ArrayList<>();
 
         if (numOfTasks == 0) {
-            messages = new String[]{Messages.EMPTY_TASK_LIST_MESSAGE};
+            messages.add(Messages.EMPTY_TASK_LIST_MESSAGE);
         }
         for (int i = 0; i < numOfTasks; i++) {
             String outputMessage = String.format("%d.\t%s", i + 1, tasks.get(i).toString());
-            messages[i] = outputMessage;
+            messages.add(outputMessage);
         }
+        messages.add(0, "Here are the tasks we found!\n");
         printMessage(messages);
     }
 }
