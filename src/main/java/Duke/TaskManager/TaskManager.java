@@ -181,7 +181,7 @@ public class TaskManager {
 
     /**
      * Converts all tasks into string format for saving.
-     * @return ArrrayList of tasks in String type.
+     * @return ArrayList of tasks in String type.
      */
     public ArrayList<String> getTasksAsStrings() {
         ArrayList<String> outputMessages = new ArrayList<>();

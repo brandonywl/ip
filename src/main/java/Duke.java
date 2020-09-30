@@ -69,7 +69,7 @@ public class Duke {
                 }
                 outputMessages = taskManager.completeTask(index);
                 Printer.printMessage(outputMessages);
-                taskManager.outputTasks();
+                taskManager.save();
                 break;
 
             case Commands.DELETE_COMMAND:
@@ -82,11 +82,10 @@ public class Duke {
                 outputMessages = taskManager.deleteTask(index);
                 taskManager.save();
                 Printer.printMessage(outputMessages);
-                taskManager.outputTasks();
                 break;
 
             case Commands.FIND_COMMAND:
-                taskManager.findTask(processedUserInput[1]);
+                taskManager.findTask(processedUserInput.get(1));
                 break;
 
             case Commands.TODO_COMMAND:

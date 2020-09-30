@@ -22,6 +22,14 @@ public class Task {
     }
 
     /**
+     * Gets the job from the task.
+     * @return Job description of the task.
+     */
+    public String getJob() {
+        return job;
+    }
+
+    /**
      * Set status of the task to complete
      * Set string representation to a tick (UTF-8)
      */
