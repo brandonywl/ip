@@ -91,6 +91,7 @@ public class Duke {
                 }
                 outputMessages = taskManager.completeTask(index);
                 Printer.printMessage(outputMessages);
+                taskManager.outputTasks();
                 break;
 
             case Commands.DELETE_COMMAND:
@@ -106,6 +107,7 @@ public class Duke {
 
                 outputMessages = taskManager.deleteTask(index);
                 Printer.printMessage(outputMessages);
+                taskManager.outputTasks();
                 break;
 
             case Commands.TODO_COMMAND:
