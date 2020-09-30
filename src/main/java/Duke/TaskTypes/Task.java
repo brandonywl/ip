@@ -32,6 +32,10 @@ public class Task {
         this.statusString = "\u2717";
     }
 
+    public String getJob() {
+        return job;
+    }
+
     public String toPlainText() {
         return String.format("|%b|%s|", this.status, this.job);
     }
