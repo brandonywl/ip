@@ -1,5 +1,6 @@
 package Duke.TaskManager;
 
+import Duke.Commands.Parser.Parser;
 import Duke.Data.FileManager;
 import Duke.Exceptions.WrongPrefixException;
 import Duke.TaskTypes.Deadline;
@@ -134,27 +135,7 @@ public class TaskManager {
         String[] tasks = dumpData.split("\n");
 
         for (String line : tasks) {
-            String[] attributes = line.split("\\|");
-            String taskType = attributes[1];
-            boolean taskStatus = Boolean.parseBoolean(attributes[2]);
-            String description = attributes[3];
-            String timing = "";
-            if (attributes.length > 4) {
-                timing = attributes[4];
-            }
-            switch (taskType){
-            case "T":
-                addTodo(description, taskStatus);
-                break;
-            case "E":
-                addEvent(description, taskStatus, timing);
-                break;
-            case "D":
-                addDeadline(description, taskStatus, timing);
-                break;
-            default:
-                throw new WrongPrefixException();
-            }
+            Parser.parseTasks(this, line);
         }
     }
 }
