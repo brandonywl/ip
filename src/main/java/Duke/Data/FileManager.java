@@ -99,9 +99,21 @@ public class FileManager {
         boolean success = true;
         if (!directoryExists(path)) {
             File file = new File(pathStr);
+            System.out.println(pathStr);
             success = file.mkdirs();
         }
         return success;
+    }
+
+    /**
+     * Wrapper for convenient of use when referring to the attribute path in the object.
+     * @param file File to write to.
+     * @param textLines Lines to write.
+     * @param appendToFile Whether to append or overwrite.
+     * @throws IOException File doesn't exist.
+     */
+    public void writeToFile(String file, ArrayList<String> textLines, boolean appendToFile) throws IOException {
+        writeToFile(path, file, textLines, appendToFile);
     }
 
     /**
@@ -110,8 +122,9 @@ public class FileManager {
      * @param appendToFile Whether to append or overwrite.
      * @throws IOException File doesn't exist.
      */
-    public void writeToFile(ArrayList<String> textLines, boolean appendToFile) throws IOException {
-        FileWriter write = new FileWriter(pathStr, appendToFile);
+    public void writeToFile(Path directory, String file, ArrayList<String> textLines, boolean appendToFile) throws IOException {
+        String fileDirectory = Paths.get(directory.toString(), file).toString();
+        FileWriter write = new FileWriter(fileDirectory, appendToFile);
         PrintWriter print_line = new PrintWriter(write);
         for (String textLine : textLines) {
             print_line.printf(textLine + "\n");
@@ -123,8 +136,8 @@ public class FileManager {
      * Provide a default method for loading the data from the path attribute of the object.
      * @return Data from the file in string format.
      */
-    public String readFromFile() {
-        return readFromFile(path);
+    public String readFromFile(String fileName) {
+        return readFromFile(path, fileName);
     }
 
     /**
@@ -132,16 +145,18 @@ public class FileManager {
      * @param path Specified full path of the file to read from
      * @return Data from the file in string format.
      */
-    public String readFromFile(Path path){
+    public String readFromFile(Path path, String fileName){
         File file;
         FileReader fr;
         BufferedReader br;
         StringBuffer sb;
 
         ensureFileExists(path);
+        Path dumpFile = Paths.get(path.toString(), fileName);
 
         try {
-            file = new File(path.toString());
+            file = new File(dumpFile.toString());
+            file.createNewFile();
             fr = new FileReader(file);
             br = new BufferedReader(fr);
             sb = new StringBuffer();
@@ -163,15 +178,16 @@ public class FileManager {
     /**
      * Dumps the current list of tasks into a txt file.
      * @param taskManager Where the tasks are stored.
+     * @param dumpFileName Where the tasks will be stored.
      */
-    public void outputTasks(TaskManager taskManager) {
+    public void outputTasks(TaskManager taskManager, String dumpFileName) {
         if (!ensureFileExists()) {
             Printer.printError(Errors.DUMP_LOCATION_ERROR);
             return;
         }
         ArrayList<String> outputMessages = taskManager.getTasksAsStrings();
         try {
-            writeToFile(outputMessages, false);
+            writeToFile(dumpFileName, outputMessages, false);
         } catch (IOException e) {
             e.printStackTrace();
         }

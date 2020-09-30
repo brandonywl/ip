@@ -15,7 +15,8 @@ import java.util.ArrayList;
 public class TaskManager {
     private final ArrayList<Task> tasks = new ArrayList<>();
     private FileManager fileManager = new FileManager();
-    private final static String dumpLoc = "data/dump.txt";
+    private final static String dumpLoc = "data/";
+    private final static String dumpFileName = "dump.txt";
 
     public TaskManager() {
         try {
@@ -196,7 +197,7 @@ public class TaskManager {
      *  Dumps the current list of tasks into a file.
      */
     public void save() {
-        fileManager.outputTasks(this);
+        fileManager.outputTasks(this, dumpFileName);
     }
 
     /**
@@ -204,10 +205,12 @@ public class TaskManager {
      * @throws WrongPrefixException User-edited dump file has a wrong prefix in the file.
      */
     public void load() throws WrongPrefixException {
-        String dumpData = fileManager.readFromFile();
+        String dumpData = fileManager.readFromFile(dumpFileName);
         String[] tasks = dumpData.split("\n");
-
         for (String line : tasks) {
+            if (line.isEmpty()){
+                break;
+            }
             Parser.parseTasks(this, line);
         }
     }
