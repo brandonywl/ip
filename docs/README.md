@@ -20,7 +20,7 @@ Exits Duke.
 
 Command:
 ```
-exit
+bye
 ```
 
 Expected:
