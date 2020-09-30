@@ -1,11 +1,11 @@
 package Duke.TaskTypes;
 
 /**
- * Duke.TaskTypes.Event task which inherits from Duke.TaskTypes.Task.
- * Adds the ability to have a timing (at).
+ * Extends Tasks to have an Event type.
+ * Adds ability to hold a timing
  */
 public class Event extends Task {
-    private String at;
+    private final String at;
 
     public Event(String job, String at) {
         super(job);
@@ -17,10 +17,10 @@ public class Event extends Task {
         this.at = at;
     }
 
-    public String getTiming() {
-        return at;
-    }
-
+    /**
+     * Converts the task to a plain-text format to be stored in a txt file.
+     * @return Plain-text format Task.
+     */
     @Override
     public String toPlainText() {
         return "|E" + super.toPlainText() + String.format("%s|", at);

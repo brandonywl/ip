@@ -2,105 +2,87 @@ package Duke.Commands.Parser;
 
 import Duke.Constants.Commands.Commands;
 import Duke.Constants.Messages.Errors;
-import Duke.Exceptions.NoInputTimingException;
 import Duke.Exceptions.WrongPrefixException;
 import Duke.TaskManager.TaskManager;
 import Duke.UI.Printer;
 
+import java.util.ArrayList;
+
 public class Parser {
-    public static String[] processInput(String input) throws NoSuchFieldException,
-            NoInputTimingException, IllegalStateException, WrongPrefixException {
+
+    /**
+     * Parses the input based on keywords and syntax. Obtains keywords, descriptors and timings from the input.
+     * @param input User input for the command Duke is to execute.
+     * @return String Array containing parsed information.
+     */
+    public static ArrayList<String> parseInput(String input) {
+        ArrayList<String> results = new ArrayList<>();
         String actionWord = extractActionWord(input)[0];
         String description;
         String timing;
+        int typeOfAction = checkTypeOfActionWord(actionWord);
+        results.add(actionWord);
 
-        if (contains(Commands.SINGLE_WORD_COMMANDS, actionWord)) {
-            return new String[]{actionWord};
-        } else if (contains(Commands.DOUBLE_WORD_COMMANDS, actionWord)) {
-            try {
-                description = extractDescription(input, actionWord);
-
-                return new String[]{
-                        actionWord,
-                        description
-                };
-            } catch (NoSuchFieldException e) {
-                String[] errorMessages = new String[]{
-                        Errors.NO_DESCRIPTION_ERROR,
-                        Errors.NO_DESCRIPTION_SOLUTION
-                };
-                Printer.printErrors(errorMessages);
-                throw e;
-            }
-        } else if (contains(Commands.TRIPLE_WORD_COMMANDS, actionWord)) {
-            try {
-                description = extractDescription(input, actionWord);
-                timing = extractTiming(input, actionWord);
-
-                return new String[]{
-                        actionWord,
-                        description,
-                        timing
-                };
-            } catch (NoSuchFieldException e) {
-                String[] errorMessages = new String[]{
-                        Errors.NO_DESCRIPTION_ERROR,
-                        Errors.NO_DESCRIPTION_SOLUTION
-                };
-                Printer.printErrors(errorMessages);
-                throw e;
-            } catch (NoInputTimingException e) {
-                String[] errorMessages;
-                String prefix = getPrefix(actionWord);
-
-                if (!prefix.isBlank()) {
-                    errorMessages = new String[]{
-                            Errors.NO_TIMING_ERROR,
-                            String.format(Errors.PREFIX_ERROR, prefix)
-                    };
-                    Printer.printErrors(errorMessages);
-                } else {
-                    Printer.printError(Errors.NO_TIMING_ERROR);
-                }
-
-                throw e;
-            } catch (WrongPrefixException e) {
-                String[] errorMessages;
-                String prefix = getPrefix(actionWord);
-
-                if (!prefix.isBlank()) {
-                    errorMessages = new String[]{
-                            Errors.WRONG_PREFIX_ERROR,
-                            String.format("Please use %s to indicate the timing", prefix)
-                    };
-                    Printer.printErrors(errorMessages);
-                } else {
-                    Printer.printError(Errors.WRONG_PREFIX_ERROR);
-                }
-
-                throw e;
-            }
-        } else {
-            // Unknown command. Throw to switch case to handle.
-            return new String[]{actionWord};
+        // Returns the most cleaned actionWord for the TaskManager to handle.
+        if (typeOfAction == 1 || typeOfAction == -1) {
+            return results;
         }
+
+        // Extract Description & Check need to terminate
+        description = extractDescription(input, actionWord);
+        if (description.equals("")) {
+            return new ArrayList<>();
+        }
+        results.add(description);
+
+        if (typeOfAction == 2) {
+            return results;
+        }
+
+        timing = extractTiming(input, actionWord);
+        if (timing.equals("")) {
+            return new ArrayList<>();
+        }
+        results.add(timing);
+
+        if (typeOfAction == 3) {
+            return results;
+        } else {
+            Printer.printError(Errors.UNKNOWN_ERROR);
+            return new ArrayList<>();
+        }
+
     }
 
     private static String[] extractActionWord(String input) {
         return new String[]{input.split(" ")[0].toUpperCase()};
     }
 
-    private static String extractDescription(String input, String actionWord) throws NoSuchFieldException {
+    private static int checkTypeOfActionWord(String actionWord) {
+        if (contains(Commands.SINGLE_WORD_COMMANDS, actionWord)) {
+            return 1;
+        } else if (contains(Commands.DOUBLE_WORD_COMMANDS, actionWord)) {
+            return 2;
+        } else if (contains(Commands.TRIPLE_WORD_COMMANDS, actionWord)) {
+            return 3;
+        } else {
+            return -1;
+        }
+    }
+
+    private static String extractDescription(String input, String actionWord) {
         // First letter of description is at actionWord length + 1 to account for space bar
         int descriptionIndex = actionWord.length() + 1;
         // If the index is out of range, description must be missing.
         if (descriptionIndex >= input.length()) {
-            throw new NoSuchFieldException();
+            Printer.printError(Errors.NO_DESCRIPTION_ERROR, Errors.NO_DESCRIPTION_SOLUTION);
+            return "";
         }
 
         String description = input.substring(descriptionIndex).strip();
         if (description.isBlank()) {
-            throw new NoSuchFieldException();
+            Printer.printError(Errors.NO_DESCRIPTION_ERROR, Errors.NO_DESCRIPTION_SOLUTION);
+            return "";
         } else {
             // Find if there is a timing command by finding indexOf "/"
             int timingIndex = description.indexOf("/");
@@ -108,52 +90,61 @@ public class Parser {
                 description = description.substring(0, timingIndex).strip();
             }
             if (description.isBlank()) {
-                throw new NoSuchFieldException();
+                Printer.printError(Errors.NO_DESCRIPTION_ERROR, Errors.NO_DESCRIPTION_SOLUTION);
+                return "";
             } else {
                 return description;
             }
         }
     }
 
-    private static String extractTiming(String input, String actionWord)
-            throws NoInputTimingException, WrongPrefixException {
+    private static String extractTiming(String input, String actionWord) {
         String prefix;
         int timingIndex;
 
         prefix = getPrefix(actionWord);
 
+        // TypeOfAction >= 3 but no prefix stored in enum.
         if (prefix.isBlank()) {
-            throw new NoInputTimingException();
+            Printer.printError(Errors.NO_PREFIX_REQUIRED);
+            return "";
         }
 
         timingIndex = input.indexOf(prefix);
 
         // Prefix not found
         if (timingIndex == -1) {
+            // If / is not used at all
             if (!input.contains("/")) {
-                throw new NoInputTimingException();
+                Printer.printError(Errors.NO_TIMING_ERROR);
+                return "";
+            } else {
+                // Wrong prefix used
+                Printer.printError(Errors.WRONG_PREFIX_ERROR, String.format(Errors.PREFIX_ERROR, prefix));
+                return "";
             }
-            throw new WrongPrefixException();
         }
 
         timingIndex += prefix.length();
 
         // Prefix found but nothing after that
         if (timingIndex >= input.length()) {
-            throw new NoInputTimingException();
+            Printer.printError(Errors.NO_TIMING_ERROR);
+            return "";
         }
         String timing = input.substring(timingIndex).strip();
 
         // Prefix found but after strip, nothing found after it
         if (timing.isBlank()) {
-            throw new NoInputTimingException();
+            Printer.printError(Errors.NO_TIMING_ERROR);
+            return "";
         } else {
             return timing;
         }
 
     }
 
-    public static boolean contains(String[] array, String actionWord) {
+    private static boolean contains(String[] array, String actionWord) {
         for (String keyword : array) {
             if (keyword.equals(actionWord)) {
                 return true;
@@ -162,7 +153,7 @@ public class Parser {
         return false;
     }
 
-    public static String getPrefix(String actionWord) {
+    private static String getPrefix(String actionWord) {
         switch (actionWord) {
         case Commands.DEADLINE_COMMAND:
             return Commands.DEADLINE_PREFIX;
@@ -173,6 +164,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses an input line into format for tasks and adds it into the taskManager list.
+     *
+     * @param taskManager TaskManager to hold tasks.
+     * @param line Line from dump file.
+     * @throws WrongPrefixException If user-edited TaskType is not legal.
+     */
     public static void parseTasks(TaskManager taskManager, String line) throws WrongPrefixException {
         String[] attributes = line.split("\\|");
         String taskType = attributes[1];

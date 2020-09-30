@@ -2,8 +2,6 @@ import Duke.Commands.Parser.Parser;
 import Duke.Constants.Commands.Commands;
 import Duke.Constants.Messages.Errors;
 import Duke.Constants.Messages.Messages;
-import Duke.Exceptions.NoInputTimingException;
-import Duke.Exceptions.WrongPrefixException;
 import Duke.TaskManager.TaskManager;
 import Duke.UI.Printer;
 
@@ -18,8 +16,6 @@ import java.util.Scanner;
  * Duke also provides methods to print useful messages
  */
 public class Duke {
-    // CONSTANTS
-
     public static void main(String[] args) {
 
         // Startup and Initializations
@@ -29,7 +25,7 @@ public class Duke {
         String actionWord;
         String description;
         String timing;
-        String[] processedUserInput;
+        ArrayList<String> processedUserInput;
         int index;
 
         // TODO: In CLI, up and down arrow inputs are parsed by the parser.
@@ -38,33 +34,13 @@ public class Duke {
         while (!currentUserInput.equalsIgnoreCase(Commands.EXIT_COMMAND)) {
             ArrayList<String> outputMessages;
             currentUserInput = sc.nextLine().strip();
-            /*
-             * Cases
-             * 1. User inputs the correct input (COMMAND DESCRIPTOR TIMING)
-             *      - Switch case should handle the event as per normal
-             * 2. User inputs only the command (COMMAND)
-             *      - If the command does not require descriptor or timing, carry on.
-             *      - In the event of tasks, throw descriptor missing
-             *      - Worry about timing in case 5.
-             * 3. User has multiple spaces between the three keywords
-             *      - Remove the null strings in the array
-             * 4. User has no spaces between the three keywords
-             *      - Treat it as wrong command
-             * 5. User is missing timing when required
-             *      - In the event of event and deadline, throw timing missing
-             * 6. User input wrong command
-             *      - Throw unknown command
-             */
+            processedUserInput = Parser.parseInput(currentUserInput);
 
-            // Try to process user input. If exception is thrown, deal with the error and carry on with next loop.
-            try {
-                processedUserInput = Parser.processInput(currentUserInput);
-            } catch (NoSuchFieldException | NoInputTimingException | WrongPrefixException e) {
+            if (processedUserInput.size() == 0) {
                 continue;
             }
-
             // actionWord has not been confirmed if it is correct yet.
-            actionWord = processedUserInput[0];
+            actionWord = processedUserInput.get(0);
 
             switch (actionWord) {
             case Commands.EXIT_COMMAND:
@@ -75,13 +51,13 @@ public class Duke {
                 break;
 
             case Commands.SAVE_COMMAND:
-                taskManager.outputTasks();
+                taskManager.save();
                 Printer.printMessage("Done!");
                 break;
 
             case Commands.COMPLETE_COMMAND:
                 try {
-                    index = Integer.parseInt(processedUserInput[1]);
+                    index = Integer.parseInt(processedUserInput.get(1));
                     if (index < 1 || index > taskManager.getNumberOfTasks()) {
                         throw new NumberFormatException();
                     }
@@ -94,41 +70,38 @@ public class Duke {
                 break;
 
             case Commands.DELETE_COMMAND:
-                try {
-                    index = Integer.parseInt(processedUserInput[1]);
-                    if (index < 1 || index > taskManager.getNumberOfTasks()) {
-                        throw new NumberFormatException();
-                    }
-                } catch (NumberFormatException e) {
+                index = Integer.parseInt(processedUserInput.get(1));
+                if (index < 1 || index > taskManager.getNumberOfTasks()) {
                     Printer.printError(Errors.INDEX_VALUE_ERROR);
                     continue;
                 }
 
                 outputMessages = taskManager.deleteTask(index);
+                taskManager.save();
                 Printer.printMessage(outputMessages);
                 break;
 
             case Commands.TODO_COMMAND:
-                description = processedUserInput[1];
+                description = processedUserInput.get(1);
                 outputMessages = taskManager.addTodo(description);
                 Printer.printMessage(outputMessages);
-                taskManager.outputTasks();
+                taskManager.save();
                 break;
 
             case Commands.DEADLINE_COMMAND:
-                description = processedUserInput[1];
-                timing = processedUserInput[2];
+                description = processedUserInput.get(1);
+                timing = processedUserInput.get(2);
                 outputMessages = taskManager.addDeadline(description, timing);
                 Printer.printMessage(outputMessages);
-                taskManager.outputTasks();
+                taskManager.save();
                 break;
 
             case Commands.EVENT_COMMAND:
-                description = processedUserInput[1];
-                timing = processedUserInput[2];
+                description = processedUserInput.get(1);
+                timing = processedUserInput.get(2);
                 outputMessages = taskManager.addEvent(description, timing);
                 Printer.printMessage(outputMessages);
-                taskManager.outputTasks();
+                taskManager.save();
                 break;
 
             default:
@@ -136,7 +109,5 @@ public class Duke {
             }
         }
         Printer.printExitMessage();
-
     }
-
 }

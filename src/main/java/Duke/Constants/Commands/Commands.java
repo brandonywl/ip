@@ -1,5 +1,8 @@
 package Duke.Constants.Commands;
 
+/**
+ * Provides an enum that holds all the command action words as well as their type in the string array.
+ */
 public enum Commands {
     ;
 
@@ -17,7 +20,7 @@ public enum Commands {
 
 
     // Consolidated Command List by Type
-    public static final String[] SINGLE_WORD_COMMANDS = new String[]{EXIT_COMMAND, LIST_COMMAND, SAVE_COMMAND};
-    public static final String[] DOUBLE_WORD_COMMANDS = new String[]{COMPLETE_COMMAND, TODO_COMMAND, DELETE_COMMAND};
-    public static final String[] TRIPLE_WORD_COMMANDS = new String[]{DEADLINE_COMMAND, EVENT_COMMAND};
+    public static final String[] SINGLE_WORD_COMMANDS = new String[] {EXIT_COMMAND, LIST_COMMAND, SAVE_COMMAND};
+    public static final String[] DOUBLE_WORD_COMMANDS = new String[] {COMPLETE_COMMAND, TODO_COMMAND, DELETE_COMMAND};
+    public static final String[] TRIPLE_WORD_COMMANDS = new String[] {DEADLINE_COMMAND, EVENT_COMMAND};
 }

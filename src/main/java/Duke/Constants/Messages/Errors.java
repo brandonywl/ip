@@ -1,5 +1,8 @@
 package Duke.Constants.Messages;
 
+/**
+ * Provides an enum that holds general error messages used.
+ */
 public enum Errors {
     ;
 
@@ -11,4 +14,7 @@ public enum Errors {
     public static final String INDEX_VALUE_ERROR = "Index is not valid or is not an integer!";
     public static final String WRONG_PREFIX_ERROR = "You used the wrong prefix!";
     public static final String PREFIX_ERROR = "Please use %s to indicate the timing";
+    public static final String NO_PREFIX_REQUIRED = "Please check if you require a timing for this command";
+    public static final String UNKNOWN_ERROR = "You should not have hit here. Check array in Commands enums.";
+    public static final String DUMP_LOCATION_ERROR = "Cannot create dump location. Check for errors.";
 }
