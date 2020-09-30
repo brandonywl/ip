@@ -1,5 +1,7 @@
+package Duke.TaskTypes;
+
 /**
- * Task Class used to hold the job description as well as the status of the job.
+ * Duke.TaskTypes.Task Class used to hold the job description as well as the status of the job.
  */
 public class Task {
     private final String job;

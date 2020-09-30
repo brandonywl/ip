@@ -1,5 +1,7 @@
+package Duke.TaskTypes;
+
 /**
- * Deadline task which inherits from Task.
+ * Duke.TaskTypes.Deadline task which inherits from Duke.TaskTypes.Task.
  * Adds the ability to have a deadline (by).
  */
 public class Deadline extends Task {

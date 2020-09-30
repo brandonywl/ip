@@ -1,5 +1,13 @@
+import Duke.Constants.Commands.Commands;
+import Duke.Constants.Messages.Errors;
+import Duke.Constants.Messages.Messages;
+import Duke.Exceptions.NoInputTimingException;
+import Duke.Exceptions.WrongPrefixException;
+import Duke.TaskTypes.Task;
+
 import java.util.ArrayList;
 import java.util.Scanner;
+
 
 
 /**
@@ -9,43 +17,6 @@ import java.util.Scanner;
  */
 public class Duke {
     // CONSTANTS
-
-    // Logo
-    public static final String LOGO = " ____        _        \n"
-            + "|  _ \\ _   _| | _____ \n"
-            + "| | | | | | | |/ / _ \\\n"
-            + "| |_| | |_| |   <  __/\n"
-            + "|____/ \\__,_|_|\\_\\___|\n";
-
-    // Command list
-    public static final String EXIT_COMMAND = "BYE";
-    public static final String LIST_COMMAND = "LIST";
-    public static final String SAVE_COMMAND = "SAVE";
-    public static final String COMPLETE_COMMAND = "DONE";
-    public static final String TODO_COMMAND = "TODO";
-    public static final String DELETE_COMMAND = "DELETE";
-    public static final String DEADLINE_COMMAND = "DEADLINE";
-    public static final String DEADLINE_PREFIX = "/by";
-    public static final String EVENT_COMMAND = "EVENT";
-    public static final String EVENT_PREFIX = "/at";
-
-    // Consolidated Command List by Type
-    public static final String[] SINGLE_WORD_COMMANDS = new String[]{EXIT_COMMAND, LIST_COMMAND, SAVE_COMMAND};
-    public static final String[] DOUBLE_WORD_COMMANDS = new String[]{COMPLETE_COMMAND, TODO_COMMAND, DELETE_COMMAND};
-    public static final String[] TRIPLE_WORD_COMMANDS = new String[]{DEADLINE_COMMAND, EVENT_COMMAND};
-
-    // Duke's Situational Messages
-    public static final String EMPTY_TASK_LIST_MESSAGE = "Seems like it's really empty here :(";
-
-    // Duke Error Messages
-    public static final String NO_DESCRIPTION_ERROR = "Sorry! There seems to be a lack of description for the task you want to add!";
-    public static final String NO_TIMING_ERROR = "Sorry! There seems to be a lack of timing for the task you want to add!";
-    public static final String INDEX_VALUE_ERROR = "Index is not valid or is not an integer!";
-    public static final String WRONG_PREFIX_ERROR = "You used the wrong prefix!";
-    public static final String PREFIX_ERROR = "Please use %s to indicate the timing";
-
-    // Duke Suggested Solutions
-    public static final String NO_DESCRIPTION_SOLUTION = "Please add a descriptor after the action word with. Ensure there is a space in the middle.";
 
     public static void main(String[] args) {
 
@@ -61,8 +32,8 @@ public class Duke {
 
         // TODO: In CLI, up and down arrow inputs are parsed by the parser.
         // Introduce the bot after startup
-        printIntroduction(LOGO);
-        while (!currentUserInput.equalsIgnoreCase(EXIT_COMMAND)) {
+        printIntroduction(Messages.LOGO);
+        while (!currentUserInput.equalsIgnoreCase(Commands.EXIT_COMMAND)) {
             ArrayList<String> outputMessages;
             currentUserInput = sc.nextLine().strip();
             /*
@@ -94,39 +65,39 @@ public class Duke {
             actionWord = processedUserInput[0];
 
             switch (actionWord) {
-            case EXIT_COMMAND:
+            case Commands.EXIT_COMMAND:
                 break;
 
-            case LIST_COMMAND:
+            case Commands.LIST_COMMAND:
                 printTasks(taskManager);
                 break;
 
-            case SAVE_COMMAND:
+            case Commands.SAVE_COMMAND:
                 taskManager.outputTasks();
                 break;
 
-            case COMPLETE_COMMAND:
+            case Commands.COMPLETE_COMMAND:
                 try {
                     index = Integer.parseInt(processedUserInput[1]);
                     if (index < 1 || index > taskManager.getNumberOfTasks()) {
                         throw new NumberFormatException();
                     }
                 } catch (NumberFormatException e) {
-                    printError(INDEX_VALUE_ERROR);
+                    printError(Errors.INDEX_VALUE_ERROR);
                     continue;
                 }
                 outputMessages = taskManager.completeTask(index);
                 printMessage(outputMessages);
                 break;
 
-            case DELETE_COMMAND:
+            case Commands.DELETE_COMMAND:
                 try {
                     index = Integer.parseInt(processedUserInput[1]);
                     if (index < 1 || index > taskManager.getNumberOfTasks()) {
                         throw new NumberFormatException();
                     }
                 } catch (NumberFormatException e) {
-                    printError(INDEX_VALUE_ERROR);
+                    printError(Errors.INDEX_VALUE_ERROR);
                     continue;
                 }
 
@@ -134,14 +105,14 @@ public class Duke {
                 printMessage(outputMessages);
                 break;
 
-            case TODO_COMMAND:
+            case Commands.TODO_COMMAND:
                 description = processedUserInput[1];
                 outputMessages = taskManager.addTodo(description);
                 printMessage(outputMessages);
                 taskManager.outputTasks();
                 break;
 
-            case DEADLINE_COMMAND:
+            case Commands.DEADLINE_COMMAND:
                 description = processedUserInput[1];
                 timing = processedUserInput[2];
                 outputMessages = taskManager.addDeadline(description, timing);
@@ -149,7 +120,7 @@ public class Duke {
                 taskManager.outputTasks();
                 break;
 
-            case EVENT_COMMAND:
+            case Commands.EVENT_COMMAND:
                 description = processedUserInput[1];
                 timing = processedUserInput[2];
                 outputMessages = taskManager.addEvent(description, timing);
@@ -244,7 +215,7 @@ public class Duke {
     }
 
     /**
-     * Method to print all tasks stored inside the Task Manager
+     * Method to print all tasks stored inside the Duke.TaskTypes.Task Manager
      *
      * @param taskManager TaskManager Object used to retrieve a list of all tasks as well as number of tasks.
      */
@@ -254,7 +225,7 @@ public class Duke {
         String[] messages = new String[numOfTasks];
 
         if (numOfTasks == 0) {
-            messages = new String[]{EMPTY_TASK_LIST_MESSAGE};
+            messages = new String[]{Messages.EMPTY_TASK_LIST_MESSAGE};
         }
         for (int i = 0; i < numOfTasks; i++) {
             String outputMessage = String.format("%d.\t%s", i + 1, tasks.get(i).toString());
@@ -269,9 +240,9 @@ public class Duke {
         String description;
         String timing;
 
-        if (contains(SINGLE_WORD_COMMANDS, actionWord)) {
+        if (contains(Commands.SINGLE_WORD_COMMANDS, actionWord)) {
             return new String[]{actionWord};
-        } else if (contains(DOUBLE_WORD_COMMANDS, actionWord)) {
+        } else if (contains(Commands.DOUBLE_WORD_COMMANDS, actionWord)) {
             try {
                 description = extractDescription(input, actionWord);
 
@@ -281,13 +252,13 @@ public class Duke {
                 };
             } catch (NoSuchFieldException e) {
                 String[] errorMessages = new String[]{
-                        NO_DESCRIPTION_ERROR,
-                        NO_DESCRIPTION_SOLUTION
+                        Errors.NO_DESCRIPTION_ERROR,
+                        Errors.NO_DESCRIPTION_SOLUTION
                 };
                 printErrors(errorMessages);
                 throw e;
             }
-        } else if (contains(TRIPLE_WORD_COMMANDS, actionWord)) {
+        } else if (contains(Commands.TRIPLE_WORD_COMMANDS, actionWord)) {
             try {
                 description = extractDescription(input, actionWord);
                 timing = extractTiming(input, actionWord);
@@ -299,8 +270,8 @@ public class Duke {
                 };
             } catch (NoSuchFieldException e) {
                 String[] errorMessages = new String[]{
-                        NO_DESCRIPTION_ERROR,
-                        NO_DESCRIPTION_SOLUTION
+                        Errors.NO_DESCRIPTION_ERROR,
+                        Errors.NO_DESCRIPTION_SOLUTION
                 };
                 printErrors(errorMessages);
                 throw e;
@@ -310,12 +281,12 @@ public class Duke {
 
                 if (!prefix.isBlank()) {
                     errorMessages = new String[]{
-                            NO_TIMING_ERROR,
-                            String.format(PREFIX_ERROR, prefix)
+                            Errors.NO_TIMING_ERROR,
+                            String.format(Errors.PREFIX_ERROR, prefix)
                     };
                     printErrors(errorMessages);
                 } else {
-                    printError(NO_TIMING_ERROR);
+                    printError(Errors.NO_TIMING_ERROR);
                 }
 
                 throw e;
@@ -325,12 +296,12 @@ public class Duke {
 
                 if (!prefix.isBlank()) {
                     errorMessages = new String[]{
-                            WRONG_PREFIX_ERROR,
+                            Errors.WRONG_PREFIX_ERROR,
                             String.format("Please use %s to indicate the timing", prefix)
                     };
                     printErrors(errorMessages);
                 } else {
-                    printError(WRONG_PREFIX_ERROR);
+                    printError(Errors.WRONG_PREFIX_ERROR);
                 }
 
                 throw e;
@@ -419,10 +390,10 @@ public class Duke {
 
     public static String getPrefix(String actionWord) {
         switch (actionWord) {
-        case DEADLINE_COMMAND:
-            return DEADLINE_PREFIX;
-        case EVENT_COMMAND:
-            return EVENT_PREFIX;
+        case Commands.DEADLINE_COMMAND:
+            return Commands.DEADLINE_PREFIX;
+        case Commands.EVENT_COMMAND:
+            return Commands.EVENT_PREFIX;
         default:
             return "";
         }

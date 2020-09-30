@@ -1,2 +1,4 @@
 |T|false|hair|
 |E|false|CS2113 lecture on Friday 18 September 2020|4 pm to 6pm|
+|T|false|hair|
+|E|false|buy dinner|2pm|
