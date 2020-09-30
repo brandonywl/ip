@@ -14,7 +14,7 @@ Commands are all case-insensitive.
 - <u>Three-Attribute Commands </u>
     - Deadline
     - Event
-<br><br>
+
 ### Single-Attribute Commands
 #### Exit
 Exits Duke.
