@@ -1,12 +1,25 @@
+package Duke.TaskManager;
+
+import Duke.Commands.Parser.Parser;
+import Duke.Data.FileManager;
+import Duke.Exceptions.WrongPrefixException;
+import Duke.TaskTypes.Deadline;
+import Duke.TaskTypes.Event;
+import Duke.TaskTypes.Task;
+import Duke.TaskTypes.Todo;
+
 import java.util.ArrayList;
+
 
 public class TaskManager {
     private final ArrayList<Task> tasks = new ArrayList<>();
+    private FileManager fileManager = new FileManager();
+    private final static String dumpLoc = "data/dump.txt";
 
-    TaskManager() {
+    public TaskManager() {
         try {
-            String[] tasks = FileManager.importTask();
-            loadTasks(tasks);
+            fileManager = new FileManager(dumpLoc);
+            importTask();
         } catch (WrongPrefixException e) {
             e.printStackTrace();
         }
@@ -113,29 +126,16 @@ public class TaskManager {
         return outputMessages;
     }
 
-    public void loadTasks(String[] tasks) throws WrongPrefixException {
+    public void outputTasks() {
+        fileManager.outputTasks(this);
+    }
+
+    public void importTask() throws WrongPrefixException {
+        String dumpData = fileManager.readFromFile();
+        String[] tasks = dumpData.split("\n");
+
         for (String line : tasks) {
-            String[] attributes = line.split("\\|");
-            String taskType = attributes[1];
-            boolean taskStatus = Boolean.parseBoolean(attributes[2]);
-            String description = attributes[3];
-            String timing = "";
-            if (attributes.length > 4) {
-                timing = attributes[4];
-            }
-            switch (taskType){
-            case "T":
-                addTodo(description, taskStatus);
-                break;
-            case "E":
-                addEvent(description, taskStatus, timing);
-                break;
-            case "D":
-                addDeadline(description, taskStatus, timing);
-                break;
-            default:
-                throw new WrongPrefixException();
-            }
+            Parser.parseTasks(this, line);
         }
     }
 }
