@@ -1,7 +1,17 @@
-|E|false|CS2113 lecture on Friday 18 September 2020|4 pm to 6pm|
-|E|false|buy dinner|2pm|
 |D|false|hair|9pm|
-|D|false|homework|2pm|
-|T|false|cs2113 tp repository|
+|D|true|homework|2pm|
+|T|true|cs2113 tp repository|
 |D|false|cs2113 jar file|2 Oct 2359 hrs|
 |E|false|cs2113 tp meeting|Monday 6pm|
+|T|false|read book|
+|D|false|return book|June 6th|
+|T|false|join sports club|
+|D|false|return book|Sunday|
+|E|false|project meeting|Mon 2-4pm|
+|T|false|read book|
+|D|false|return book|June 6th|
+|E|false|project meeting|Aug 6th 2-4pm|
+|T|false|join sports club|
+|T|false|borrow book|
+|D|false|return book|Sunday|
+|E|false|project meeting|Mon 2-4pm|
