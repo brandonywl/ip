@@ -1,22 +1,23 @@
-import Duke.Data.FileHandler;
+package Duke.TaskManager;
+
+import Duke.Data.FileManager;
 import Duke.Exceptions.WrongPrefixException;
 import Duke.TaskTypes.Deadline;
 import Duke.TaskTypes.Event;
 import Duke.TaskTypes.Task;
 import Duke.TaskTypes.Todo;
 
-import java.io.*;
 import java.util.ArrayList;
 
 
 public class TaskManager {
     private final ArrayList<Task> tasks = new ArrayList<>();
-    private FileHandler fileHandler = new FileHandler();
+    private FileManager fileManager = new FileManager();
     private final static String dumpLoc = "data/dump.txt";
 
-    TaskManager() {
+    public TaskManager() {
         try {
-            fileHandler = new FileHandler(dumpLoc);
+            fileManager = new FileManager(dumpLoc);
             importTask();
         } catch (WrongPrefixException e) {
             e.printStackTrace();
@@ -125,17 +126,11 @@ public class TaskManager {
     }
 
     public void outputTasks() {
-        fileHandler.directoryExists();
-        String[] outputMessages = getTasksAsStrings();
-        try {
-            fileHandler.writeToFile(outputMessages, false);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        fileManager.outputTasks(this);
     }
 
     public void importTask() throws WrongPrefixException {
-        String dumpData = fileHandler.readFromFile();
+        String dumpData = fileManager.readFromFile();
         String[] tasks = dumpData.split("\n");
 
         for (String line : tasks) {

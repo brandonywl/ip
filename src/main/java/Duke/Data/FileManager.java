@@ -1,5 +1,7 @@
 package Duke.Data;
 
+import Duke.TaskManager.TaskManager;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,15 +13,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 
-public class FileHandler {
+public class FileManager {
     private String pathStr;
     private Path path;
 
-    public FileHandler() {
+    public FileManager() {
 
     }
 
-    public FileHandler(String ... relativePath) {
+    public FileManager(String ... relativePath) {
         this.pathStr = getPathStr(relativePath);
         this.path = getPath(relativePath);
     }
@@ -42,11 +44,6 @@ public class FileHandler {
             currDir = saveFolderPath.toString();
         }
         return saveFolderPath;
-    }
-
-    public final void setPath(Path path) {
-        this.path = path;
-        this.pathStr = path.toString();
     }
 
     public boolean directoryExists() {
@@ -127,4 +124,15 @@ public class FileHandler {
 
         return sb.toString();
     }
+
+    public void outputTasks(TaskManager taskManager) {
+        directoryExists();
+        String[] outputMessages = taskManager.getTasksAsStrings();
+        try {
+            writeToFile(outputMessages, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

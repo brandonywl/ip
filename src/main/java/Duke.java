@@ -3,6 +3,7 @@ import Duke.Constants.Messages.Errors;
 import Duke.Constants.Messages.Messages;
 import Duke.Exceptions.NoInputTimingException;
 import Duke.Exceptions.WrongPrefixException;
+import Duke.TaskManager.TaskManager;
 import Duke.TaskTypes.Task;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.Scanner;
 
 
 /**
- * Main class that runs the chat bot. Tasks are managed by the TaskManager
+ * Main class that runs the chat bot. Tasks are managed by the Duke.TaskManager.TaskManager
  * Duke provides the extraction of action words, descriptions and due dates
  * Duke also provides methods to print useful messages
  */
@@ -217,7 +218,7 @@ public class Duke {
     /**
      * Method to print all tasks stored inside the Duke.TaskTypes.Task Manager
      *
-     * @param taskManager TaskManager Object used to retrieve a list of all tasks as well as number of tasks.
+     * @param taskManager Duke.TaskManager.TaskManager Object used to retrieve a list of all tasks as well as number of tasks.
      */
     public static void printTasks(TaskManager taskManager) {
         ArrayList<Task> tasks = taskManager.getTasks();
