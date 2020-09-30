@@ -102,7 +102,7 @@ public class Duke {
                 break;
 
             case SAVE_COMMAND:
-                taskManager.outputTasks();
+                FileManager.outputTasks(taskManager);
                 break;
 
             case COMPLETE_COMMAND:
@@ -138,7 +138,7 @@ public class Duke {
                 description = processedUserInput[1];
                 outputMessages = taskManager.addTodo(description);
                 printMessage(outputMessages);
-                taskManager.outputTasks();
+                FileManager.outputTasks(taskManager);
                 break;
 
             case DEADLINE_COMMAND:
@@ -146,7 +146,7 @@ public class Duke {
                 timing = processedUserInput[2];
                 outputMessages = taskManager.addDeadline(description, timing);
                 printMessage(outputMessages);
-                taskManager.outputTasks();
+                FileManager.outputTasks(taskManager);
                 break;
 
             case EVENT_COMMAND:
@@ -154,7 +154,7 @@ public class Duke {
                 timing = processedUserInput[2];
                 outputMessages = taskManager.addEvent(description, timing);
                 printMessage(outputMessages);
-                taskManager.outputTasks();
+                FileManager.outputTasks(taskManager);
                 break;
 
             default:

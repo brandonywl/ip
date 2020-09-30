@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.ArrayList;
 
 public class TaskManager {
@@ -6,9 +5,10 @@ public class TaskManager {
 
     TaskManager() {
         try {
-            importTask();
+            String[] tasks = FileManager.importTask();
+            loadTasks(tasks);
         } catch (WrongPrefixException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -113,45 +113,7 @@ public class TaskManager {
         return outputMessages;
     }
 
-    public void outputTasks() {
-        String dumpFile = checkDumpMade();
-
-        String[] outputMessages = getTasksAsStrings();
-
-        WriteFile writer = new WriteFile(dumpFile);
-        try {
-            writer.writeToFile(outputMessages);
-            System.out.println("Dump successful");
-        } catch (IOException e) {
-            System.out.println("Failed to dump file");
-        }
-    }
-
-    public void importTask() throws WrongPrefixException {
-        String dumpFile = checkDumpMade();
-        File file;
-        FileReader fr;
-        BufferedReader br;
-        StringBuffer sb;
-        try {
-            file = new File(dumpFile);
-            fr = new FileReader(file);
-            br = new BufferedReader(fr);
-            sb = new StringBuffer();
-            String nextLine;
-
-            while ((nextLine = br.readLine()) != null) {
-                sb.append(nextLine);
-                sb.append("\n");
-            }
-            fr.close();
-
-        } catch (IOException e) {
-            System.out.println(e);
-            return;
-        }
-
-        String[] tasks = sb.toString().split("\n");
+    public void loadTasks(String[] tasks) throws WrongPrefixException {
         for (String line : tasks) {
             String[] attributes = line.split("\\|");
             String taskType = attributes[1];
@@ -175,21 +137,5 @@ public class TaskManager {
                 throw new WrongPrefixException();
             }
         }
-    }
-
-    public String checkDumpMade() {
-        String home = System.getProperty("user.dir");
-        java.nio.file.Path saveFolderPath = java.nio.file.Paths.get(home, "data");
-        String saveFolder = saveFolderPath.toString();
-        java.nio.file.Path dumpFilePath = java.nio.file.Paths.get(saveFolder, "dump.txt");
-        String dumpFile = dumpFilePath.toString();
-
-        if (!java.nio.file.Files.exists(dumpFilePath)) {
-            File file = new File(saveFolder);
-            boolean success = file.mkdirs();
-            String message = success ? "Made directories" : "Failed to make directories";
-            System.out.println(message);
-        }
-        return dumpFile;
     }
 }
